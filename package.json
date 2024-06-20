@@ -1,0 +1,23 @@
+{
+  "name": "videoPlay",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+ "scripts": {
+  "start": "pnpm run start:web && pnpm run start:api",
+  "start:web": "cd web && pnpm preview",
+  "start:api": "cd api && npm start",
+   "dev": "concurrently \"pnpm run dev:web\" ",
+  "dev:web": "cd web && pnpm run dev",
+  "dev:api": "cd api && npm run start:dev",
+  "build": "npm run build:web && npm run build:api",
+  "build:web": "cd web && pnpm run build",
+  "build:api": "cd api && npm run build"
+},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
