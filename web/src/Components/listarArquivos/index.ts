@@ -1,13 +1,15 @@
 import { S3Client, ListObjectsCommand } from '@aws-sdk/client-s3'
 
+const endpoint = 'http://192.168.18.89:9000'
+
 const s3Client = new S3Client({
-  endpoint: 'http://147.185.221.19:41985', // URL do MinIO
+  endpoint,
   region: 'us-east-1',
   credentials: {
     accessKeyId: 'admin123',
     secretAccessKey: 'admin123',
   },
-  forcePathStyle: true, // Necessário para MinIO
+  forcePathStyle: true,
 })
 
 interface Arquivo {
@@ -18,8 +20,6 @@ export async function listarArquivos(bucketName: string): Promise<Arquivo[]> {
   try {
     const command = new ListObjectsCommand({ Bucket: bucketName })
     const response = await s3Client.send(command)
-
-    // Mapear a resposta para a interface Arquivo
     const arquivos: Arquivo[] = (response.Contents || []).map((item) => ({
       Key: item.Key,
     }))
@@ -30,3 +30,5 @@ export async function listarArquivos(bucketName: string): Promise<Arquivo[]> {
     return []
   }
 }
+
+export { endpoint, s3Client }
