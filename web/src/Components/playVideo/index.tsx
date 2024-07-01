@@ -1,14 +1,12 @@
-import { useEffect, useState } from 'react'
-import {
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-  Box,
-} from '@chakra-ui/react'
-import { listarArquivos } from '../listarArquivos'
-import { Div } from './styles'
+import { useEffect, useState, useCallback } from 'react'
+import { Pagination } from '@mui/material'
+import Accordion from '@mui/material/Accordion'
+import AccordionDetails from '@mui/material/AccordionDetails'
+import AccordionSummary from '@mui/material/AccordionSummary'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { Accordiondiv, Herosection } from './styles'
+import { listarArquivos, endpoint } from '../listarArquivos'
+import ReactPlayer from 'react-player'
 
 interface Arquivo {
   Key: string | undefined
@@ -17,52 +15,60 @@ interface Arquivo {
 export const PlayVideo = () => {
   const [arquivos, setArquivos] = useState<Arquivo[]>([])
   const [openedIndex, setOpenedIndex] = useState<number | null>(null)
-  const bucketName = 'biel'
+  const bucketName = 'test'
+
+  const fetchData = useCallback(async () => {
+    const files = await listarArquivos(bucketName)
+    setArquivos(files)
+  }, [bucketName])
 
   useEffect(() => {
-    async function fetchData() {
-      const files = await listarArquivos(bucketName)
-      setArquivos(files)
-    }
     fetchData()
-  }, [])
+  }, [fetchData])
 
   const handleAccordionChange = (index: number) => {
     setOpenedIndex(openedIndex === index ? null : index)
   }
 
   return (
-    <Div>
-      <Accordion allowToggle>
+    <Herosection className="container">
+      <Pagination
+        count={7}
+        color="primary"
+        hidePrevButton
+        hideNextButton
+        size="large"
+      />
+
+      <Accordiondiv>
         {arquivos.map((file, index) => (
-          <AccordionItem key={index}>
-            <h2>
-              <AccordionButton
-                onClick={() => handleAccordionChange(index)}
-                className="text"
-              >
-                <Box as="span" flex="1" textAlign="left">
-                  {file.Key || 'Arquivo sem nome'}
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-            </h2>
-            <AccordionPanel pb={4} className="play">
+          <Accordion
+            key={file.Key || index}
+            expanded={openedIndex === index}
+            onChange={() => handleAccordionChange(index)}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls={`panel${index}-content`}
+              id={`panel${index}-header`}
+              className="text"
+            >
+              {file.Key || 'Arquivo sem nome'}
+            </AccordionSummary>
+            <AccordionDetails className="Player">
               {openedIndex === index && file.Key ? (
-                <video width="580" height="480" controls>
-                  <source
-                    src={`http://147.185.221.19:41985/${bucketName}/${file.Key}`}
-                    type="video/mp4"
-                  />
-                  Seu navegador não suporta a tag de vídeo.
-                </video>
+                <ReactPlayer
+                  url={`${endpoint}/${bucketName}/${file.Key}`}
+                  controls
+                  onError={() => console.log('Erro ao carregar o vídeo')}
+                />
               ) : openedIndex === index ? (
-                <p>Arquivo sem chave definida</p>
+                <div>Arquivo sem chave definida</div>
               ) : null}
-            </AccordionPanel>
-          </AccordionItem>
+            </AccordionDetails>
+          </Accordion>
         ))}
-      </Accordion>
-    </Div>
+      </Accordiondiv>
+    </Herosection>
   )
 }
