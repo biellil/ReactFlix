@@ -1,11 +1,11 @@
 import { Route, Routes } from 'react-router-dom'
-import { Home } from './pages/home'
+import { PlayVideo } from './Components/playVideo'
 // import { UploadFileComponent } from './pages/UploadVideo'
 
 export function Routers() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<PlayVideo />} />
       {/* <Route path="/uploadvideo" element={<UploadFileComponent />} /> */}
     </Routes>
   )
