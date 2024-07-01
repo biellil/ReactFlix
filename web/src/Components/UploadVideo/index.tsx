@@ -5,7 +5,7 @@ import { Progress } from '@chakra-ui/react'
 import { Hero } from './styles'
 
 const s3Client = new S3Client({
-  endpoint: 'http://147.185.221.19:41985', // URL do MinIO
+  endpoint: 'http://192.168.18.89:9000', // URL do MinIO
   region: 'us-east-1',
   credentials: {
     accessKeyId: 'admin123', // Use valores fixos ou obtenha de forma segura no backend
@@ -30,7 +30,7 @@ export const UploadFileComponent: React.FC = () => {
       return
     }
 
-    const bucketName = 'biel'
+    const bucketName = 'test'
     const key = `${selectedFile.name}`
 
     try {
