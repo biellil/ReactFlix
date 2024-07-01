@@ -1,21 +1,23 @@
 import styled from 'styled-components'
 
-export const Div = styled.div`
-  margin-top: 2vh;
-  .AccordionButton {
-    width: 85vw;
-    color: white;
-    max-height: 90vh;
+export const Herosection = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+`
+export const Accordiondiv = styled.div`
+  width: 50vw;
+  .text {
+    div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
-
-  .play {
+  .Player {
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  .text {
-    display: flex;
-    gap: 30vw;
-    color: white;
   }
 `
