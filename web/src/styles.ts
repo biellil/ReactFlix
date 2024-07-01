@@ -11,7 +11,7 @@ export const MainHero = styled.section`
     width: 100%;
     max-width: 70rem;
 
-    margin-top: 25rem;
+    margin-top: 5rem;
     margin-right: auto;
     margin-left: auto;
     padding: 1rem 0.5rem;
