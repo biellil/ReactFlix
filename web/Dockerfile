@@ -1,5 +1,5 @@
 
-FROM node:20.13-alpine3.20 AS builder
+FROM node:20.13 AS builder
 RUN npm install -g pnpm
 WORKDIR /app
 COPY package*.json ./
