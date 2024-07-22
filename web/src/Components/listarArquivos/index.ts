@@ -1,6 +1,6 @@
 import { S3Client, ListObjectsCommand } from '@aws-sdk/client-s3'
 
-const endpoint = 'http://192.168.18.89:9000'
+const endpoint = 'http://147.185.221.19:41985'
 
 const s3Client = new S3Client({
   endpoint,
