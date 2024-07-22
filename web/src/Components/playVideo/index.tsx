@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback } from 'react'
-import { Pagination } from '@mui/material'
 import Accordion from '@mui/material/Accordion'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
@@ -15,7 +14,7 @@ interface Arquivo {
 export const PlayVideo = () => {
   const [arquivos, setArquivos] = useState<Arquivo[]>([])
   const [openedIndex, setOpenedIndex] = useState<number | null>(null)
-  const bucketName = 'test'
+  const bucketName = 'biel'
 
   const fetchData = useCallback(async () => {
     const files = await listarArquivos(bucketName)
@@ -32,20 +31,13 @@ export const PlayVideo = () => {
 
   return (
     <Herosection className="container">
-      <Pagination
-        count={7}
-        color="primary"
-        hidePrevButton
-        hideNextButton
-        size="large"
-      />
-
       <Accordiondiv>
         {arquivos.map((file, index) => (
           <Accordion
             key={file.Key || index}
             expanded={openedIndex === index}
             onChange={() => handleAccordionChange(index)}
+            className="Accordion"
           >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -60,6 +52,8 @@ export const PlayVideo = () => {
                 <ReactPlayer
                   url={`${endpoint}/${bucketName}/${file.Key}`}
                   controls
+                  height="34vh"
+                  className="react-player"
                   onError={() => console.log('Erro ao carregar o vídeo')}
                 />
               ) : openedIndex === index ? (
