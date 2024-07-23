@@ -1,4 +1,12 @@
+import { createTheme } from '@mui/material/styles'
 import { createGlobalStyle } from 'styled-components'
+// A custom theme for this app
+export const theme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+})
+
 export const GlobalStyle = createGlobalStyle`
 
 
