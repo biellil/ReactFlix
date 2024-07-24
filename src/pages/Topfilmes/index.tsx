@@ -65,7 +65,7 @@ export default function Topfilmes() {
   }, [page, fetchMovies])
 
   const handlePageChange = (
-    event: React.ChangeEvent<unknown> | null,
+    _: React.ChangeEvent<unknown>, // Marcador para o parâmetro não utilizado
     value: number,
   ) => {
     setPage(value)

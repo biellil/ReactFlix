@@ -10,8 +10,13 @@ const Home = lazy(() => import('../../pages/Home'))
 export function DefaultLayout() {
   const [selectedCategory, setSelectedCategory] = useState('home')
 
-  const handleCategoryChange = (category: SetStateAction<string>) => {
+  const handleCategoryChange = (category: string) => {
     setSelectedCategory(category)
+  }
+
+  const handleSearchChange = (searchTerm: string) => {
+    // Implementar o que deve ser feito quando a pesquisa mudar
+    console.log('Pesquisa mudou para:', searchTerm)
   }
 
   const renderContent = () => {
@@ -29,7 +34,10 @@ export function DefaultLayout() {
 
   return (
     <LayoutContainer className="container">
-      <Header onCategoryChange={handleCategoryChange} />
+      <Header 
+        onCategoryChange={handleCategoryChange} 
+        onSearchChange={handleSearchChange} 
+      />
       <Suspense fallback={<div>Carregando...</div>}>{renderContent()}</Suspense>
     </LayoutContainer>
   )

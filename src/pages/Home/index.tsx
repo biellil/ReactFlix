@@ -64,10 +64,7 @@ export default function Home() {
     fetchMovies(page)
   }, [page, fetchMovies])
 
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown> | null,
-    value: number,
-  ) => {
+  const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value)
   }
 

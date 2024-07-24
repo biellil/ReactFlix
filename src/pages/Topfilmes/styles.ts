@@ -33,12 +33,16 @@ export const MovieCard = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
   width: 12rem;
+  display: flex;
+  align-items: end;
+  justify-content: center;
   @media (max-width: 999px) {
     width: 10rem;
   }
   &:hover {
     border: 1px solid red;
     transform: scale(1.05);
+    color: red;
   }
 `
 
@@ -47,11 +51,14 @@ export const MovieBanner = styled.img`
   height: 100%;
 `
 
-export const MovieTitle = styled.h2`
+export const MovieTitle = styled.h3`
   position: absolute;
-  margin-top: 4rem;
-  font-size: 12px;
-  padding: 12px;
-
+  font-size: 11.5px;
+  padding: 0 12px;
+  z-index: 10;
+  display: flex;
   text-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
 `
