@@ -28,4 +28,7 @@ export const Category = styled.div`
       transform: scale(1.05);
     }
   }
+  .not-allowed {
+    cursor: not-allowed;
+  }
 `

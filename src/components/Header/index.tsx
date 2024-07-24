@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { Fire, House, GridFour } from '@phosphor-icons/react'
 import { Category, Headers } from './styles'
 import icon from '../../assets/icon.png'
-import { OutlinedInput } from '@mui/material'
+import { IconButton, InputAdornment, OutlinedInput } from '@mui/material'
+import SearchIcon from '@mui/icons-material/Search'
 
 interface HeaderProps {
   onCategoryChange: (category: string) => void
@@ -43,8 +44,8 @@ export function Header({ onCategoryChange, onSearchChange }: HeaderProps) {
           <h2>Popular</h2>
         </div>
         <div
-          onClick={() => handleCategoryChange('category')}
-          className={activeCategory === 'category' ? 'active' : ''}
+          // onClick={() => handleCategoryChange('category')}
+          className={activeCategory === 'category' ? 'active' : 'not-allowed'}
         >
           <GridFour size={32} weight="fill" />
           <h2>Categoria</h2>
@@ -59,6 +60,13 @@ export function Header({ onCategoryChange, onSearchChange }: HeaderProps) {
           onChange={handleSearchChange}
           autoComplete="off"
           autoFocus
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton edge="end">
+                <SearchIcon />
+              </IconButton>
+            </InputAdornment>
+          }
         />
       </label>
     </Headers>
