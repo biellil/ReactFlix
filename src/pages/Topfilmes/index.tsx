@@ -8,9 +8,6 @@ import {
   MovieTitle,
 } from './styles'
 
-// Criação do cache como um objeto global (para simplicidade, pode ser alterado para um sistema mais sofisticado)
-const cache = new Map()
-
 export function Topfilmes() {
   const [movies, setMovies] = useState([])
   const [page, setPage] = useState(1)
@@ -18,15 +15,16 @@ export function Topfilmes() {
   const [error, setError] = useState(null)
 
   const fetchMovies = useCallback(async (page: number) => {
-    // Verificar se os dados estão no cache
-    if (cache.has(page)) {
-      const cachedData = cache.get(page)
-      setMovies(cachedData.results)
-      setTotalPages(cachedData.total_pages)
+    const cacheKey = `movies_page_top_${page}`
+    const cachedData = localStorage.getItem(cacheKey)
+
+    if (cachedData) {
+      const { results, total_pages } = JSON.parse(cachedData)
+      setMovies(results)
+      setTotalPages(total_pages)
       return
     }
 
-    setError(null)
     try {
       const response = await fetch(
         `/api/tmdb/popular?language=pt-BR&page=${page}`,
@@ -37,17 +35,15 @@ export function Topfilmes() {
           },
         },
       )
-
       if (!response.ok) {
         throw new Error('Erro ao buscar filmes')
       }
-
       const data = await response.json()
-      // Armazenar no cache
-      cache.set(page, data)
-
       setMovies(data.results)
       setTotalPages(data.total_pages)
+
+      // Cache the data
+      localStorage.setItem(cacheKey, JSON.stringify(data))
     } catch (error) {
       setError(error.message)
     }
@@ -67,27 +63,23 @@ export function Topfilmes() {
   return (
     <TopContainer>
       {error && <Alert severity="error">{error}</Alert>}
-      {!error && (
-        <>
-          <Pagination
-            count={totalPages}
-            page={page}
-            onChange={handlePageChange}
-            variant="outlined"
-          />
-          <MoviesGrid>
-            {movies.map((movie) => (
-              <MovieCard key={movie.id}>
-                <MovieTitle>{movie.title}</MovieTitle>
-                <MovieBanner
-                  src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
-                  alt={movie.title}
-                />
-              </MovieCard>
-            ))}
-          </MoviesGrid>
-        </>
-      )}
+      <Pagination
+        count={totalPages}
+        page={page}
+        onChange={handlePageChange}
+        variant="outlined"
+      />
+      <MoviesGrid>
+        {movies.map((movie) => (
+          <MovieCard key={movie.id}>
+            <MovieTitle>{movie.title}</MovieTitle>
+            <MovieBanner
+              src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
+              alt={movie.title}
+            />
+          </MovieCard>
+        ))}
+      </MoviesGrid>
     </TopContainer>
   )
 }
