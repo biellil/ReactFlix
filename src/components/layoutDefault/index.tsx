@@ -1,4 +1,4 @@
-import { SetStateAction, useState, lazy, Suspense } from 'react'
+import { useState, lazy, Suspense } from 'react'
 import { LayoutContainer } from './styles'
 import { Header } from '../Header'
 
