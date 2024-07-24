@@ -8,7 +8,7 @@ import {
   MovieTitle,
 } from './styles'
 
-export function Home() {
+export default function Home() {
   const [movies, setMovies] = useState([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -72,11 +72,11 @@ export function Home() {
       <MoviesGrid>
         {movies.map((movie) => (
           <MovieCard key={movie.id}>
-            <MovieTitle>{movie.title}</MovieTitle>
             <MovieBanner
               src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
               alt={movie.title}
             />
+            <MovieTitle>{movie.title}</MovieTitle>
           </MovieCard>
         ))}
       </MoviesGrid>

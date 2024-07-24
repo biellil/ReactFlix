@@ -1,6 +1,6 @@
 import { CategoryContainer } from './styles'
 
-export function Category() {
+export default function Category() {
   return (
     <>
       <CategoryContainer>

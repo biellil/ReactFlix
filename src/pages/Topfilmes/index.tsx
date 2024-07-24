@@ -8,7 +8,7 @@ import {
   MovieTitle,
 } from './styles'
 
-export function Topfilmes() {
+export default function Topfilmes() {
   const [movies, setMovies] = useState([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
