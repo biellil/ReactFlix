@@ -1,16 +1,28 @@
 import { createTheme } from '@mui/material/styles'
 import { createGlobalStyle } from 'styled-components'
-// A custom theme for this app
-export const theme = createTheme({
+
+export const lightTheme = createTheme({
+  palette: {
+    mode: 'light',
+  },
+})
+
+export const darkTheme = createTheme({
   palette: {
     mode: 'dark',
+    background: {
+      default: '#1f1e1e',
+    },
   },
 })
 
 export const GlobalStyle = createGlobalStyle`
 
+a{
+  text-decoration: none;
+  color: inherit;
 
-
+}
   * {
     margin: 0;
     padding: 0;
@@ -18,13 +30,11 @@ export const GlobalStyle = createGlobalStyle`
     outline: none;
     border: none;
     text-decoration: none;
-    
-    
-  font-family: sans-serif;
+    font-family: sans-serif;
   
   html {
    
-    font-size: 100%;
+    font-size: 99%;
   }
 
   body {
