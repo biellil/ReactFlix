@@ -24,7 +24,7 @@ export default function Topfilmes() {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [error, setError] = useState<string | null>(null)
-
+  const apiUrl = import.meta.env.VITE_API_URL
   const fetchMovies = useCallback(async (page: number) => {
     const cacheKey = `movies_page_top_${page}`
     const cachedData = localStorage.getItem(cacheKey)
@@ -38,7 +38,7 @@ export default function Topfilmes() {
 
     try {
       const response = await fetch(
-        `/api/tmdb/popular?language=pt-BR&page=${page}`,
+        `${apiUrl}/popular?language=pt-BR&page=${page}`,
         {
           headers: {
             Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
