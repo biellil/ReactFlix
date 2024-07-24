@@ -24,7 +24,7 @@ export default function Home() {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [error, setError] = useState<string | null>(null)
-
+  const apiUrl = import.meta.env.VITE_API_URL
   const fetchMovies = useCallback(async (page: number) => {
     const cacheKey = `movies_page_${page}`
     const cachedData = localStorage.getItem(cacheKey)
@@ -38,7 +38,7 @@ export default function Home() {
 
     try {
       const response = await fetch(
-        `/api/tmdb/top_rated?language=pt-BR&page=${page}`,
+        `${apiUrl}/top_rated?language=pt-BR&page=${page}&api_key=${import.meta.env.VITE_API_KEY}`,
         {
           headers: {
             Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,

@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api/tmdb': {
-        target: 'http://api.themoviedb.org/3',
+        target: 'https://api.themoviedb.org/3/movie',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/tmdb/, ''),
       },
