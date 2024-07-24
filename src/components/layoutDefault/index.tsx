@@ -1,9 +1,12 @@
-import { SetStateAction, useState } from 'react'
+import { SetStateAction, useState, lazy, Suspense } from 'react'
 import { LayoutContainer } from './styles'
 import { Header } from '../Header'
-import { Topfilmes } from '../../pages/Topfilmes'
-import { Category } from '../../pages/category'
-import { Home } from '../../pages/Home'
+
+// Importação dos componentes usando lazy
+const Topfilmes = lazy(() => import('../../pages/Topfilmes'))
+const Category = lazy(() => import('../../pages/category'))
+const Home = lazy(() => import('../../pages/Home'))
+
 export function DefaultLayout() {
   const [selectedCategory, setSelectedCategory] = useState('home')
 
@@ -27,7 +30,7 @@ export function DefaultLayout() {
   return (
     <LayoutContainer className="container">
       <Header onCategoryChange={handleCategoryChange} />
-      {renderContent()}
+      <Suspense fallback={<div>Carregando...</div>}>{renderContent()}</Suspense>
     </LayoutContainer>
   )
 }
