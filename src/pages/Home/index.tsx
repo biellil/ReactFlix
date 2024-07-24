@@ -8,18 +8,29 @@ import {
   MovieTitle,
 } from './styles'
 
+interface Movie {
+  id: number
+  backdrop_path: string
+  title: string
+}
+
+interface ApiResponse {
+  results: Movie[]
+  total_pages: number
+}
+
 export default function Home() {
-  const [movies, setMovies] = useState([])
+  const [movies, setMovies] = useState<Movie[]>([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
 
   const fetchMovies = useCallback(async (page: number) => {
     const cacheKey = `movies_page_${page}`
     const cachedData = localStorage.getItem(cacheKey)
 
     if (cachedData) {
-      const { results, total_pages } = JSON.parse(cachedData)
+      const { results, total_pages }: ApiResponse = JSON.parse(cachedData)
       setMovies(results)
       setTotalPages(total_pages)
       return
@@ -38,14 +49,14 @@ export default function Home() {
       if (!response.ok) {
         throw new Error('Erro ao buscar filmes')
       }
-      const data = await response.json()
+      const data: ApiResponse = await response.json()
       setMovies(data.results)
       setTotalPages(data.total_pages)
 
       // Cache the data
       localStorage.setItem(cacheKey, JSON.stringify(data))
     } catch (error) {
-      setError(error.message)
+      setError((error as Error).message)
     }
   }, [])
 
@@ -54,7 +65,7 @@ export default function Home() {
   }, [page, fetchMovies])
 
   const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
+    event: React.ChangeEvent<unknown> | null,
     value: number,
   ) => {
     setPage(value)
