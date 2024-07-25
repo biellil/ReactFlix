@@ -1,51 +1,58 @@
-import React, { useState } from 'react'
-import { Fire, House, GridFour } from '@phosphor-icons/react'
-import { Category, Headers } from './styles'
-import icon from '../../assets/icon.png'
-import { IconButton, InputAdornment, OutlinedInput } from '@mui/material'
-import SearchIcon from '@mui/icons-material/Search'
+import React, { useState } from "react";
+import { Fire, House, GridFour, Infinity } from "@phosphor-icons/react";
+import { Category, Headers } from "./styles";
+import icon from "../../assets/icon.png";
+import { IconButton, InputAdornment, OutlinedInput } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 interface HeaderProps {
-  onCategoryChange: (category: string) => void
-  onSearchChange: (searchTerm: string) => void
+  onCategoryChange: (category: string) => void;
+  onSearchChange: (searchTerm: string) => void;
 }
 
 export function Header({ onCategoryChange, onSearchChange }: HeaderProps) {
-  const [activeCategory, setActiveCategory] = useState<string>('home')
-  const [searchTerm, setSearchTerm] = useState<string>('')
+  const [activeCategory, setActiveCategory] = useState<string>("home");
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const handleCategoryChange = (category: string) => {
-    setActiveCategory(category)
-    onCategoryChange(category)
-  }
+    setActiveCategory(category);
+    onCategoryChange(category);
+  };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value
-    setSearchTerm(value)
-    onSearchChange(value)
-  }
+    const value = event.target.value;
+    setSearchTerm(value);
+    onSearchChange(value);
+  };
 
   return (
     <Headers>
       <img src={icon} alt="Ícone" />
       <Category>
         <div
-          onClick={() => handleCategoryChange('home')}
-          className={activeCategory === 'home' ? 'active' : ''}
+          onClick={() => handleCategoryChange("home")}
+          className={activeCategory === "home" ? "active" : ""}
         >
           <House size={32} weight="fill" />
           <h2>Início</h2>
         </div>
         <div
-          onClick={() => handleCategoryChange('popular')}
-          className={activeCategory === 'popular' ? 'active' : ''}
+          onClick={() => handleCategoryChange("popular")}
+          className={activeCategory === "popular" ? "active" : ""}
         >
           <Fire size={32} weight="fill" />
           <h2>Popular</h2>
         </div>
         <div
+          onClick={() => handleCategoryChange("popular")}
+          className={activeCategory === "Animes" ? "active" : "not-allowed"}
+        >
+          <Infinity size={32} />
+          <h2>Animes</h2>
+        </div>
+        <div
           // onClick={() => handleCategoryChange('category')}
-          className={activeCategory === 'category' ? 'active' : 'not-allowed'}
+          className={activeCategory === "category" ? "active" : "not-allowed"}
         >
           <GridFour size={32} weight="fill" />
           <h2>Categoria</h2>
@@ -59,7 +66,6 @@ export function Header({ onCategoryChange, onSearchChange }: HeaderProps) {
           value={searchTerm}
           onChange={handleSearchChange}
           autoComplete="off"
-          autoFocus
           endAdornment={
             <InputAdornment position="end">
               <IconButton edge="end">
@@ -70,5 +76,5 @@ export function Header({ onCategoryChange, onSearchChange }: HeaderProps) {
         />
       </label>
     </Headers>
-  )
+  );
 }
