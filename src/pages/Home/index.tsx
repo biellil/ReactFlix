@@ -20,7 +20,7 @@ interface ApiResponse {
   total_pages: number
 }
 
-const PRELOAD_PAGES = 3 // Número de páginas futuras a pré-carregar
+const PRELOAD_PAGES = import.meta.env.VITE_PRELOAD_PAGES || 3 // Número de páginas futuras a pré-carregar
 
 export default function Home() {
   const [movies, setMovies] = useState<Movie[]>([])
