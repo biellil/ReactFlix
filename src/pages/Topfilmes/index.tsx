@@ -8,6 +8,7 @@ import {
   MovieBanner,
   MovieTitle,
 } from './styles'
+import { ContentModal } from '../../components/modal'
 
 interface Movie {
   id: number
@@ -20,15 +21,17 @@ interface ApiResponse {
   total_pages: number
 }
 
-const PRELOAD_PAGES = import.meta.env.VITE_PRELOAD_PAGES || 3 // Número de páginas futuras a pré-carregar
+const PRELOAD_PAGES = import.meta.env.VITE_PRELOAD_PAGES || 3
 
 export default function Topfilmes() {
   const [movies, setMovies] = useState<Movie[]>([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(true) // Novo estado para controle de carregamento
-  const [openSnackbar, setOpenSnackbar] = useState(false) // Estado para controle de Snackbar
+  const [isLoading, setIsLoading] = useState(true)
+  const [openSnackbar, setOpenSnackbar] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null)
 
   const apiUrl = import.meta.env.VITE_API_URL
 
@@ -42,7 +45,7 @@ export default function Topfilmes() {
         if (!isPreload) {
           setMovies(results)
           setTotalPages(total_pages)
-          setIsLoading(false) // Marcar como carregado
+          setIsLoading(false)
         }
         return
       }
@@ -64,16 +67,15 @@ export default function Topfilmes() {
         if (!isPreload) {
           setMovies(data.results)
           setTotalPages(data.total_pages)
-          setIsLoading(false) // Marcar como carregado
+          setIsLoading(false)
         }
 
-        // Cache the data
         localStorage.setItem(cacheKey, JSON.stringify(data))
       } catch (error) {
         if (!isPreload) {
           setError((error as Error).message)
-          setOpenSnackbar(true) // Mostrar Snackbar com erro
-          setIsLoading(false) // Marcar como carregado mesmo em caso de erro
+          setOpenSnackbar(true)
+          setIsLoading(false)
         }
       }
     },
@@ -81,10 +83,8 @@ export default function Topfilmes() {
   )
 
   useEffect(() => {
-    // Carregar a página atual
     fetchMovies(page)
 
-    // Pré-carregar páginas futuras somente após a página atual estar carregada
     if (!isLoading) {
       for (let i = 1; i <= PRELOAD_PAGES; i++) {
         const nextPage = page + i
@@ -95,16 +95,23 @@ export default function Topfilmes() {
     }
   }, [page, fetchMovies, totalPages, isLoading])
 
-  const handlePageChange = (
-    _: React.ChangeEvent<unknown>, // Marcador para o parâmetro não utilizado
-    value: number,
-  ) => {
+  const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value)
-    setIsLoading(true) // Marcar como carregando ao mudar de página
+    setIsLoading(true)
   }
 
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false)
+  }
+
+  const handleOpenModal = (id: number) => {
+    setSelectedMovieId(id)
+    setModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setModalOpen(false)
+    setSelectedMovieId(null)
   }
 
   return (
@@ -117,7 +124,7 @@ export default function Topfilmes() {
       />
       <MoviesGrid>
         {movies.map((movie) => (
-          <MovieCard key={movie.id}>
+          <MovieCard key={movie.id} onClick={() => handleOpenModal(movie.id)}>
             <MovieBanner
               src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
               alt={movie.title}
@@ -126,8 +133,6 @@ export default function Topfilmes() {
           </MovieCard>
         ))}
       </MoviesGrid>
-
-      {/* Snackbar para exibir o alerta */}
       <Snackbar
         open={openSnackbar}
         autoHideDuration={6000}
@@ -152,6 +157,12 @@ export default function Topfilmes() {
           {error}
         </Alert>
       </Snackbar>
+      <ContentModal
+        open={modalOpen}
+        onClose={handleCloseModal}
+        contentId={selectedMovieId?.toString() || ''}
+        contentType="filme"
+      />
     </TopContainer>
   )
 }
