@@ -46,13 +46,17 @@ export const ContentModal: FC<ContentModalProps> = ({
       aria-describedby="modal-description"
     >
       <Box sx={modalStyle}>
-        <Typography id="modal-title" variant="h6" component="h2"></Typography>
+        <Typography id="modal-title" variant="h6" component="h2">
+          Conteúdo
+        </Typography>
         {iframeSrc ? (
           <iframe
             src={iframeSrc}
             style={{ width: '100%', height: '90%', border: 'none' }}
             title="Video"
             allowFullScreen
+            loading="lazy"
+            sandbox="allow-same-origin allow-scripts" 
           />
         ) : (
           <Typography variant="body1">Carregando...</Typography>
