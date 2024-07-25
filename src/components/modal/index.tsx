@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { Modal, Box, Typography, Button } from '@mui/material'
 
 interface ContentModalProps {
@@ -20,7 +20,7 @@ const modalStyle = {
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
-  p: 2, // Ajustado o padding
+  p: 2,
 }
 
 export const ContentModal: FC<ContentModalProps> = ({
