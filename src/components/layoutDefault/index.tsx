@@ -27,6 +27,8 @@ export function DefaultLayout() {
         return <Topfilmes />
       case 'category':
         return <Category />
+      case 'Animes':
+        return <h1>animes</h1>
       default:
         return null
     }
@@ -34,9 +36,9 @@ export function DefaultLayout() {
 
   return (
     <LayoutContainer className="container">
-      <Header 
-        onCategoryChange={handleCategoryChange} 
-        onSearchChange={handleSearchChange} 
+      <Header
+        onCategoryChange={handleCategoryChange}
+        onSearchChange={handleSearchChange}
       />
       <Suspense fallback={<div>Carregando...</div>}>{renderContent()}</Suspense>
     </LayoutContainer>
