@@ -25,7 +25,7 @@ export function Header({ onCategoryChange, onSearchChange }: HeaderProps) {
     onSearchChange(value)
 
     // Limpar todas as chaves de cache no localStorage
-   // localStorage.clear()
+    localStorage.clear()
   }
 
   return (
