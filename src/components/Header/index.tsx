@@ -39,7 +39,6 @@ export function Header({ onCategoryChange, onSearchChange }: HeaderProps) {
         localStorage.removeItem(key)
       }
     })
-    alert('Cache limpo com sucesso!')
   }
 
   return (
