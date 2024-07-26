@@ -87,9 +87,11 @@ export function Header({ onCategoryChange, onSearchChange }: HeaderProps) {
           }
         />
       </label>
-      <Button onClick={clearCache} variant="contained" color="secondary">
-        Limpar Cache
-      </Button>
+      <Button
+        onClick={clearCache}
+        variant="contained"
+        color="secondary"
+      ></Button>
     </Headers>
   )
 }
