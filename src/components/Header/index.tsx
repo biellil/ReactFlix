@@ -2,7 +2,12 @@ import React, { useState } from 'react'
 import { Fire, House, GridFour } from '@phosphor-icons/react'
 import { Category, Headers } from './styles'
 import icon from '../../assets/icon.png'
-import { IconButton, InputAdornment, OutlinedInput } from '@mui/material'
+import {
+  IconButton,
+  InputAdornment,
+  OutlinedInput,
+  Button,
+} from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 
 interface HeaderProps {
@@ -23,9 +28,18 @@ export function Header({ onCategoryChange, onSearchChange }: HeaderProps) {
     const value = event.target.value
     setSearchTerm(value)
     onSearchChange(value)
+  }
 
-    // Limpar todas as chaves de cache no localStorage
-    localStorage.clear()
+  const clearCache = () => {
+    Object.keys(localStorage).forEach((key) => {
+      if (
+        key.startsWith('movies_page_home_') ||
+        key.startsWith('movies_page_top_')
+      ) {
+        localStorage.removeItem(key)
+      }
+    })
+    alert('Cache limpo com sucesso!')
   }
 
   return (
@@ -74,6 +88,9 @@ export function Header({ onCategoryChange, onSearchChange }: HeaderProps) {
           }
         />
       </label>
+      <Button onClick={clearCache} variant="contained" color="secondary">
+        Limpar Cache
+      </Button>
     </Headers>
   )
 }
