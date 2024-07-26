@@ -52,7 +52,7 @@ export default function Home() {
 
       try {
         const response = await fetch(
-          `${apiUrl}/top_rated?language=pt-BR&page=${page}`,
+          `${apiUrl}/movie/top_rated?language=pt-BR&page=${page}`,
           {
             headers: {
               Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,

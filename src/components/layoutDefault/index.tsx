@@ -1,6 +1,7 @@
 import { useState, lazy, Suspense } from 'react'
 import { LayoutContainer } from './styles'
 import { Header } from '../Header'
+import SearchComponent from '../../pages/Search'
 
 // Importação dos componentes usando lazy
 const Topfilmes = lazy(() => import('../../pages/Topfilmes'))
@@ -9,14 +10,16 @@ const Home = lazy(() => import('../../pages/Home'))
 
 export function DefaultLayout() {
   const [selectedCategory, setSelectedCategory] = useState('home')
+  const [searchTerm, setSearchTerm] = useState('')
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category)
   }
 
   const handleSearchChange = (searchTerm: string) => {
-    // Implementar o que deve ser feito quando a pesquisa mudar
-    console.log('Pesquisa mudou para:', searchTerm)
+    setSearchTerm(searchTerm)
+    // Muda a categoria para 'Search' quando o termo de pesquisa é alterado
+    setSelectedCategory('Search')
   }
 
   const renderContent = () => {
@@ -27,8 +30,8 @@ export function DefaultLayout() {
         return <Topfilmes />
       case 'category':
         return <Category />
-      case 'Animes':
-        return <h1>animes</h1>
+      case 'Search':
+        return <SearchComponent searchTerm={searchTerm} />
       default:
         return null
     }

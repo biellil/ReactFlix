@@ -52,7 +52,7 @@ export default function Topfilmes() {
 
       try {
         const response = await fetch(
-          `${apiUrl}/popular?language=pt-BR&page=${page}`,
+          `${apiUrl}/movie/popular?language=pt-BR&page=${page}`,
           {
             headers: {
               Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
