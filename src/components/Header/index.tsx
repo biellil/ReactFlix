@@ -23,6 +23,9 @@ export function Header({ onCategoryChange, onSearchChange }: HeaderProps) {
     const value = event.target.value
     setSearchTerm(value)
     onSearchChange(value)
+
+    // Limpar todas as chaves de cache no localStorage
+   // localStorage.clear()
   }
 
   return (
