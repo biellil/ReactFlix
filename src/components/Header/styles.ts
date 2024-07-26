@@ -10,6 +10,15 @@ export const Headers = styled.header`
   margin-bottom: 1rem;
 
   img {
+    display: flex;
+  }
+
+  label {
+    @media (max-width: 999px) {
+      display: flex;
+      gap: 0.5rem;
+      width: 19vw;
+    }
   }
 `
 export const Category = styled.div`
@@ -21,6 +30,19 @@ export const Category = styled.div`
     display: flex;
     gap: 0.5rem;
     transition: 0.5s;
+    svg {
+      width: 2rem;
+      height: 2rem;
+      @media (max-width: 999px) {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+    @media (max-width: 999px) {
+      align-items: center;
+      font-size: 12.5px;
+      gap: 0rem;
+    }
   }
   .active {
     color: red;
@@ -30,5 +52,9 @@ export const Category = styled.div`
   }
   .not-allowed {
     cursor: not-allowed;
+  }
+
+  @media (max-width: 999px) {
+    gap: 0.4rem;
   }
 `
