@@ -2,6 +2,7 @@ import { useState, lazy, Suspense } from 'react'
 import { LayoutContainer } from './styles'
 import { Header } from '../Header'
 import SearchComponent from '../../pages/Search'
+// import { AdSenseAd } from '../AdSenseAd'
 
 // Importação dos componentes usando lazy
 const Topfilmes = lazy(() => import('../../pages/Topfilmes'))
@@ -44,6 +45,11 @@ export function DefaultLayout() {
         onSearchChange={handleSearchChange}
       />
       <Suspense fallback={<div>Carregando...</div>}>{renderContent()}</Suspense>
+      {/* <AdSenseAd
+        adClient="ca-pub-4542878322637122"
+        adFormat="auto"
+        adSlot="8986190269"
+      /> */}
     </LayoutContainer>
   )
 }
