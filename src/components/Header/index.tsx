@@ -1,34 +1,29 @@
-import React, { useState } from "react";
-import { FilmReel, FilmScript } from "@phosphor-icons/react";
-import { Category, Headers } from "./styles";
-import icon from "../../assets/icon.png";
-import {
-  IconButton,
-  InputAdornment,
-  OutlinedInput,
-  Button,
-} from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import React, { useState } from 'react'
+import { FilmReel, FilmScript } from '@phosphor-icons/react'
+import { Category, Headers } from './styles'
+import icon from '../../assets/icon.png'
+import { IconButton, InputAdornment, OutlinedInput } from '@mui/material'
+import SearchIcon from '@mui/icons-material/Search'
 
 interface HeaderProps {
-  onCategoryChange: (category: string) => void;
-  onSearchChange: (searchTerm: string) => void;
+  onCategoryChange: (category: string) => void
+  onSearchChange: (searchTerm: string) => void
 }
 
 export function Header({ onCategoryChange, onSearchChange }: HeaderProps) {
-  const [activeCategory, setActiveCategory] = useState<string>("home");
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [activeCategory, setActiveCategory] = useState<string>('Filmes')
+  const [searchTerm, setSearchTerm] = useState<string>('')
 
   const handleCategoryChange = (category: string) => {
-    setActiveCategory(category);
-    onCategoryChange(category);
-  };
+    setActiveCategory(category)
+    onCategoryChange(category)
+  }
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setSearchTerm(value);
-    onSearchChange(value);
-  };
+    const value = event.target.value
+    setSearchTerm(value)
+    onSearchChange(value)
+  }
 
   // const clearCache = () => {
   //   Object.keys(localStorage).forEach((key) => {
@@ -46,15 +41,15 @@ export function Header({ onCategoryChange, onSearchChange }: HeaderProps) {
       <img src={icon} alt="Ícone" />
       <Category>
         <div
-          onClick={() => handleCategoryChange("Filmes")}
-          className={activeCategory === "Filmes" ? "active" : ""}
+          onClick={() => handleCategoryChange('Filmes')}
+          className={activeCategory === 'Filmes' ? 'active' : ''}
         >
           <FilmReel size={32} weight="fill" />
           <h2>Filmes</h2>
         </div>
         <div
           // onClick={() => handleCategoryChange('Series')}
-          className={activeCategory === "Series" ? "active" : "not-allowed"}
+          className={activeCategory === 'Series' ? 'active' : 'not-allowed'}
         >
           <FilmScript size={32} weight="fill" />
           <h2>Series</h2>
@@ -93,5 +88,5 @@ export function Header({ onCategoryChange, onSearchChange }: HeaderProps) {
         color="secondary"
       ></Button> */}
     </Headers>
-  );
+  )
 }
