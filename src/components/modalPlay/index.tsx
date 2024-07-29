@@ -35,7 +35,6 @@ export const ModalPlay: FC<ContentModalProps> = ({
       aria-describedby="modal-description"
     >
       <Box sx={modalStyle} className="modalStyle">
-        <h1>{contentId}</h1>
         {iframeSrc ? (
           <iframe
             src={iframeSrc}
