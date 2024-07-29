@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { signInWithGoogle, signInWithApple } from '../firebase';
+import styled from 'styled-components'
+import { signInWithGoogle, signInWithApple } from '../firebase'
 
 // Estilos
 const LoginContainer = styled.div`
@@ -9,7 +9,7 @@ const LoginContainer = styled.div`
   justify-content: center;
   height: 100vh;
   background-color: #f0f2f5;
-`;
+`
 
 const LoginButton = styled.button`
   background-color: #4285f4;
@@ -25,28 +25,28 @@ const LoginButton = styled.button`
   &:hover {
     background-color: #357ae8;
   }
-`;
+`
 
 const AppleButton = styled(LoginButton)`
   background-color: #000;
   &:hover {
     background-color: #333;
   }
-`;
+`
 
 const LoginTitle = styled.h1`
   font-size: 24px;
   margin-bottom: 20px;
-`;
+`
 
-const Login = () => {
+export const Login: React.FC = () => {
   const handleGoogleLogin = async () => {
-    await signInWithGoogle();
-  };
+    await signInWithGoogle()
+  }
 
   const handleAppleLogin = async () => {
-    await signInWithApple();
-  };
+    await signInWithApple()
+  }
 
   return (
     <LoginContainer>
@@ -54,7 +54,5 @@ const Login = () => {
       <LoginButton onClick={handleGoogleLogin}>Entrar com Google</LoginButton>
       <AppleButton onClick={handleAppleLogin}>Entrar com Apple</AppleButton>
     </LoginContainer>
-  );
-};
-
-export default Login;
+  )
+}

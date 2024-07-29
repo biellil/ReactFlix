@@ -8,7 +8,7 @@ const Topfilmes = lazy(() => import('../../pages/Topfilmes'))
 // const Category = lazy(() => import('../../pages/category'))
 const TopSeries = lazy(() => import('../../pages/TopSeries'))
 const SearchComponent = lazy(() => import('../../pages/Search'))
-export function DefaultLayout() {
+export default function DefaultLayout() {
   const [selectedCategory, setSelectedCategory] = useState('Filmes')
   const [searchTerm, setSearchTerm] = useState('')
 
