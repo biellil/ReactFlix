@@ -8,7 +8,7 @@ import {
   ResultBanner,
   ResultTitle,
 } from './styles'
-import { ContentModal } from '../../components/modal'
+import { ModalPlay } from '../../components/modalPlay'
 
 interface Result {
   id: number
@@ -43,7 +43,7 @@ export default function SearchComponent({ searchTerm }: SearchComponentProps) {
       setIsLoading(true)
       try {
         const response = await fetch(
-          `${API_URL}/search/movie?query=${encodeURIComponent(searchTerm)}&include_adult=false&language=en-US&page=${page}`,
+          `${API_URL}/search/movie?query=${encodeURIComponent(searchTerm)}&include_adult=false&language=pt-BR&page=${page}`,
           {
             headers: {
               Authorization: `Bearer ${API_KEY}`,
@@ -145,7 +145,7 @@ export default function SearchComponent({ searchTerm }: SearchComponentProps) {
         </Alert>
       </Snackbar>
 
-      <ContentModal
+      <ModalPlay
         open={modalOpen}
         onClose={handleCloseModal}
         contentId={selectedResultId?.toString() || ''}
