@@ -28,7 +28,7 @@ export const Category = styled.div`
   div {
     cursor: pointer;
     display: flex;
-    gap: 0.5rem;
+    gap: 0.2rem;
     transition: 0.5s;
     svg {
       width: 2rem;
@@ -51,6 +51,7 @@ export const Category = styled.div`
     }
   }
   .not-allowed {
+    color: gray;
     cursor: not-allowed;
   }
 
