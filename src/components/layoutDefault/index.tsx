@@ -1,16 +1,15 @@
 import { useState, lazy, Suspense } from 'react'
 import { LayoutContainer } from './styles'
 import { Header } from '../Header'
-import SearchComponent from '../../pages/Search'
 // import { AdSenseAd } from '../AdSenseAd'
 
 // Importação dos componentes usando lazy
 const Topfilmes = lazy(() => import('../../pages/Topfilmes'))
-const Category = lazy(() => import('../../pages/category'))
-const Home = lazy(() => import('../../pages/Home'))
-
+// const Category = lazy(() => import('../../pages/category'))
+const TopSeries = lazy(() => import('../../pages/TopSeries'))
+const SearchComponent = lazy(() => import('../../pages/Search'))
 export function DefaultLayout() {
-  const [selectedCategory, setSelectedCategory] = useState('home')
+  const [selectedCategory, setSelectedCategory] = useState('Filmes')
   const [searchTerm, setSearchTerm] = useState('')
 
   const handleCategoryChange = (category: string) => {
@@ -25,12 +24,12 @@ export function DefaultLayout() {
 
   const renderContent = () => {
     switch (selectedCategory) {
-      case 'home':
-        return <Home />
-      case 'popular':
+      case 'Filmes':
         return <Topfilmes />
-      case 'category':
-        return <Category />
+      case 'Series':
+        return <TopSeries />
+      // case 'category':
+      //   return <Category />
       case 'Search':
         return <SearchComponent searchTerm={searchTerm} />
       default:
