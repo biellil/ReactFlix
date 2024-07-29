@@ -1,7 +1,7 @@
 import { BrowserRouter } from 'react-router-dom'
 import { Routers } from './Router'
 import { MainHero } from './styles/styles'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { analytics } from './components/firebase'
 import { logEvent } from 'firebase/analytics'
 
