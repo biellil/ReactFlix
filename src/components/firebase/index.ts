@@ -1,6 +1,12 @@
 // src/components/firebase.ts
 import { initializeApp } from 'firebase/app'
 import { getAnalytics } from 'firebase/analytics'
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  OAuthProvider,
+} from 'firebase/auth'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -12,9 +18,35 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 }
 
-// console.log(firebaseConfig) // Adicione esta linha para verificar as variáveis
-
+// Inicializa o app Firebase
 const app = initializeApp(firebaseConfig)
 const analytics = getAnalytics(app)
 
-export { analytics }
+// Configura a autenticação e os provedores
+const auth = getAuth(app)
+const googleProvider = new GoogleAuthProvider()
+const appleProvider = new OAuthProvider('apple.com')
+
+// Função para fazer login com Google
+const signInWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider)
+    const user = result.user
+    console.log('Usuário autenticado com Google:', user)
+  } catch (error) {
+    console.error('Erro ao fazer login com Google:', error)
+  }
+}
+
+// Função para fazer login com Apple
+const signInWithApple = async () => {
+  try {
+    const result = await signInWithPopup(auth, appleProvider)
+    const user = result.user
+    console.log('Usuário autenticado com Apple:', user)
+  } catch (error) {
+    console.error('Erro ao fazer login com Apple:', error)
+  }
+}
+
+export { analytics, signInWithGoogle, signInWithApple }
