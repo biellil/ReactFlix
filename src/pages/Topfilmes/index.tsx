@@ -8,7 +8,7 @@ import {
   MovieBanner,
   MovieTitle,
 } from './styles'
-import { ContentModal } from '../../components/modal'
+import { ModalPlay } from '../../components/modalPlay'
 
 interface Movie {
   id: number
@@ -37,10 +37,11 @@ export default function Topfilmes() {
 
   const fetchMovies = useCallback(
     async (page: number, isPreload = false) => {
-      const cacheKey = `movies_page_top_${page}`
+      const cacheKey = `movies_page_Topfilmes_${page}`
       const cachedData = localStorage.getItem(cacheKey)
 
       if (cachedData) {
+        // eslint-disable-next-line camelcase
         const { results, total_pages }: ApiResponse = JSON.parse(cachedData)
         if (!isPreload) {
           setMovies(results)
@@ -63,6 +64,7 @@ export default function Topfilmes() {
         if (!response.ok) {
           throw new Error('Erro ao buscar filmes')
         }
+        console.log('Response F:', response)
         const data: ApiResponse = await response.json()
         if (!isPreload) {
           setMovies(data.results)
@@ -157,7 +159,7 @@ export default function Topfilmes() {
           {error}
         </Alert>
       </Snackbar>
-      <ContentModal
+      <ModalPlay
         open={modalOpen}
         onClose={handleCloseModal}
         contentId={selectedMovieId?.toString() || ''}
