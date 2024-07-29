@@ -4,6 +4,7 @@ import { MainHero } from './styles/styles'
 import { useEffect } from 'react'
 import { analytics } from './components/firebase'
 import { logEvent } from 'firebase/analytics'
+import { Analytics } from '@vercel/analytics/react'
 
 export function App() {
   useEffect(() => {
@@ -13,6 +14,7 @@ export function App() {
   return (
     <MainHero>
       <BrowserRouter>
+        <Analytics />
         <Routers />
       </BrowserRouter>
     </MainHero>
