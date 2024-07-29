@@ -1,7 +1,7 @@
 // src/components/ModalPlay/ModalPlay.tsx
 import { FC } from 'react'
 import { Modal, Box, Typography, Button } from '@mui/material'
-import { modalStyle } from './styles'
+import { modalStyle, StyledLinearProgress } from './styles'
 
 interface ContentModalProps {
   open: boolean
@@ -45,7 +45,13 @@ export const ModalPlay: FC<ContentModalProps> = ({
             sandbox="allow-same-origin allow-scripts"
           />
         ) : (
-          <Typography variant="body1">Carregando...</Typography>
+          <Typography variant="body1">
+            <StyledLinearProgress
+              variant="buffer"
+              value={50} // Ajuste conforme necessário
+              valueBuffer={70} // Ajuste conforme necessário
+            />
+          </Typography>
         )}
         <Button onClick={onClose} sx={{ mt: 2 }} variant="contained">
           Fechar

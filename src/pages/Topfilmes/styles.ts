@@ -27,6 +27,7 @@ export const MoviesGrid = styled.div`
 `
 
 export const MovieCard = styled.div`
+  cursor: pointer;
   border: 1px solid #ccc;
   border-radius: 8px;
   overflow: hidden;

@@ -1,5 +1,6 @@
+// DefaultLayout.tsx
 import { useState, lazy, Suspense } from 'react'
-import { LayoutContainer } from './styles'
+import { LayoutContainer, StyledLinearProgress } from './styles'
 import { Header } from '../Header'
 // import { AdSenseAd } from '../AdSenseAd'
 
@@ -8,6 +9,7 @@ const Topfilmes = lazy(() => import('../../pages/Topfilmes'))
 // const Category = lazy(() => import('../../pages/category'))
 const TopSeries = lazy(() => import('../../pages/TopSeries'))
 const SearchComponent = lazy(() => import('../../pages/Search'))
+
 export default function DefaultLayout() {
   const [selectedCategory, setSelectedCategory] = useState('Filmes')
   const [searchTerm, setSearchTerm] = useState('')
@@ -43,7 +45,17 @@ export default function DefaultLayout() {
         onCategoryChange={handleCategoryChange}
         onSearchChange={handleSearchChange}
       />
-      <Suspense fallback={<div>Carregando...</div>}>{renderContent()}</Suspense>
+      <Suspense
+        fallback={
+          <StyledLinearProgress
+            variant="buffer"
+            value={50} // Ajuste conforme necessário
+            valueBuffer={70} // Ajuste conforme necessário
+          />
+        }
+      >
+        {renderContent()}
+      </Suspense>
       {/* <AdSenseAd
         adClient="ca-pub-4542878322637122"
         adFormat="auto"
