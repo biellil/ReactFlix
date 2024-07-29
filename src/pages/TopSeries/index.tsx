@@ -8,7 +8,7 @@ import {
   MovieBanner,
   MovieTitle,
 } from './styles'
-import { ContentModal } from '../../components/modal'
+import { ModalPlay } from '../../components/modalPlay'
 
 interface Movie {
   id: number
@@ -23,7 +23,7 @@ interface ApiResponse {
 
 const PRELOAD_PAGES = import.meta.env.VITE_PRELOAD_PAGES || 3
 
-export default function Home() {
+export default function TopSeries() {
   const [movies, setMovies] = useState<Movie[]>([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -37,10 +37,11 @@ export default function Home() {
 
   const fetchMovies = useCallback(
     async (page: number, isPreload = false) => {
-      const cacheKey = `movies_page_home_${page}`
+      const cacheKey = `movies_page_TopSeries_${page}`
       const cachedData = localStorage.getItem(cacheKey)
 
       if (cachedData) {
+        // eslint-disable-next-line camelcase
         const { results, total_pages }: ApiResponse = JSON.parse(cachedData)
         if (!isPreload) {
           setMovies(results)
@@ -52,7 +53,7 @@ export default function Home() {
 
       try {
         const response = await fetch(
-          `${apiUrl}/movie/top_rated?language=pt-BR&page=${page}`,
+          `${apiUrl}/tv/top_rated?language=pt-BR&page=${page}`,
           {
             headers: {
               Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
@@ -63,7 +64,9 @@ export default function Home() {
         if (!response.ok) {
           throw new Error('Erro ao buscar filmes')
         }
+        console.log(response)
         const data: ApiResponse = await response.json()
+
         if (!isPreload) {
           setMovies(data.results)
           setTotalPages(data.total_pages)
@@ -157,7 +160,7 @@ export default function Home() {
           {error}
         </Alert>
       </Snackbar>
-      <ContentModal
+      <ModalPlay
         open={modalOpen}
         onClose={handleCloseModal}
         contentId={selectedMovieId?.toString() || ''}
