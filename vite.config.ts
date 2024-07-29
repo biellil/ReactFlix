@@ -9,7 +9,7 @@ export default defineConfig({
     react(),
     visualizer({
       filename: './dist/stats.html',
-      open: true,
+      open: false,
     }),
     viteCompression({ algorithm: 'brotliCompress' }),
   ],
@@ -27,5 +27,6 @@ export default defineConfig({
         },
       },
     },
+    chunkSizeWarningLimit: 600, // Ajuste o limite de aviso para chunks maiores
   },
 })
