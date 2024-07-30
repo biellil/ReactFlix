@@ -9,6 +9,7 @@ import {
   ResultTitle,
 } from './styles'
 import { ModalPlay } from '../../components/modalPlay'
+import { Loading } from '../../components/Loading'
 
 interface Result {
   id: number
@@ -94,7 +95,7 @@ export default function SearchComponent({ searchTerm }: SearchComponentProps) {
   return (
     <SearchContainer>
       {isLoading ? (
-        <p>Carregando...</p>
+        <Loading />
       ) : (
         <>
           <Pagination

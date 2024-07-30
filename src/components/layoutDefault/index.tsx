@@ -1,7 +1,8 @@
 // DefaultLayout.tsx
 import { useState, lazy, Suspense } from 'react'
-import { LayoutContainer, StyledLinearProgress } from './styles'
+import { LayoutContainer } from './styles'
 import { Header } from '../Header'
+import { Loading } from '../Loading'
 // import { AdSenseAd } from '../AdSenseAd'
 
 // Importação dos componentes usando lazy
@@ -45,17 +46,7 @@ export default function DefaultLayout() {
         onCategoryChange={handleCategoryChange}
         onSearchChange={handleSearchChange}
       />
-      <Suspense
-        fallback={
-          <StyledLinearProgress
-            variant="buffer"
-            value={50} // Ajuste conforme necessário
-            valueBuffer={70} // Ajuste conforme necessário
-          />
-        }
-      >
-        {renderContent()}
-      </Suspense>
+      <Suspense fallback={<Loading />}>{renderContent()}</Suspense>
       {/* <AdSenseAd
         adClient="ca-pub-4542878322637122"
         adFormat="auto"
