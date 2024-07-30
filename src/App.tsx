@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { analytics } from './components/firebase'
 import { logEvent } from 'firebase/analytics'
 import { Analytics } from '@vercel/analytics/react'
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from '@vercel/speed-insights/react'
 export function App() {
   useEffect(() => {
     logEvent(analytics, 'page_view')
@@ -16,7 +16,7 @@ export function App() {
       <BrowserRouter>
         <Analytics />
         <Routers />
-        <SpeedInsights/>
+        <SpeedInsights />
       </BrowserRouter>
     </MainHero>
   )
