@@ -11,6 +11,10 @@ export const Headers = styled.header`
 
   img {
     display: flex;
+
+    @media (max-width: 768px) {
+      width: 5.5rem;
+    }
   }
 
   label {
@@ -19,6 +23,8 @@ export const Headers = styled.header`
       gap: 0.5rem;
       width: 19vw;
     }
+  }
+  @media (max-width: 768px) {
   }
 `
 export const Category = styled.div`
@@ -43,6 +49,12 @@ export const Category = styled.div`
       font-size: 12.5px;
       gap: 0rem;
     }
+    @media (max-width: 768px) {
+      font-size: 0.9rem;
+    }
+  }
+  @media (max-width: 768px) {
+    flex-direction: column;
   }
   .active {
     color: red;
