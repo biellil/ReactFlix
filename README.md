@@ -27,10 +27,10 @@ Funcionalidades Principais
 Desafios e Soluções
 
 []Gerenciamento de Estado: Implementação do Redux para garantir um fluxo de dados consistente e previsível.<br/>
-[]Autenticação e Autorização: Integração com Firebase para manejo seguro de sessões de usuários.<br/>
-[]Performance: Utilização de técnicas de lazy loading e memoização para otimização da performance da aplicação.<br/>
-[]Estilização Modular: Uso de Styled Components e Emotion para garantir uma estilização modular, que evita conflitos e facilita a manutenção do código.<br/>
-[]Animações e Interatividade: Implementação de animações fluidas utilizando React Spring para melhorar a experiência do usuário.<br/>
+[x]Autenticação e Autorização: Integração com Firebase para manejo seguro de sessões de usuários.<br/>
+[x]Performance: Utilização de técnicas de lazy loading e memoização para otimização da performance da aplicação.<br/>
+[x]Estilização Modular: Uso de Styled Components e Emotion para garantir uma estilização modular, que evita conflitos e facilita a manutenção do código.<br/>
+[x]Animações e Interatividade: Implementação de animações fluidas utilizando React Spring para melhorar a experiência do usuário.<br/>
 Conclusão
 
 O ReactFlix é um projeto que demonstra a capacidade de desenvolver uma aplicação completa, moderna e funcional utilizando React e outras tecnologias do ecossistema typescript. Com ele, conseguimos entregar uma experiência de usuário rica, com diversas funcionalidades que replicam o comportamento de uma plataforma de streaming popular como a Netflix. Através deste projeto, reforcei minhas habilidades em desenvolvimento front-end, gerenciamento de estado, integração com APIs e implementação de autenticação, preparando-me para enfrentar desafios ainda maiores no mundo do desenvolvimento web.
