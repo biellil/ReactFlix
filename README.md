@@ -1,5 +1,3 @@
-Nome do Projeto: ReactFlix
-
 Bem-vindos ao ReactFlix, uma aplicação web desenvolvida com React que replica a experiência de navegação e consumo de conteúdo oferecida pelos streaming de filmes e séries. Este projeto tem como objetivo demonstrar habilidades em desenvolvimento front-end utilizando a biblioteca React, juntamente com outras tecnologias modernas do ecossistema typescript.
 
 Tecnologias Utilizadas
