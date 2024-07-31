@@ -3,6 +3,8 @@ import { Button, Typography, TextField, Box } from '@mui/material'
 import { signInWithGoogle, signInWithApple } from '../firebase'
 import { LoginContainer, GoogleButton, AppleButton } from './styles'
 import { AuthAnimationWrapper } from '../AuthAnimationWrapper'
+import GoogleIcon from '@mui/icons-material/Google'
+import AppleIcon from '@mui/icons-material/Apple'
 
 interface LoginPageProps {
   switchToSignup: () => void
@@ -86,10 +88,16 @@ const LoginPage = ({ switchToSignup }: LoginPageProps) => {
             variant="contained"
             fullWidth
             onClick={handleGoogleLogin}
+            startIcon={<GoogleIcon />}
           >
             Entrar com Google
           </GoogleButton>
-          <AppleButton variant="contained" fullWidth onClick={handleAppleLogin}>
+          <AppleButton
+            variant="contained"
+            fullWidth
+            onClick={handleAppleLogin}
+            startIcon={<AppleIcon />}
+          >
             Entrar com Apple
           </AppleButton>
         </div>
