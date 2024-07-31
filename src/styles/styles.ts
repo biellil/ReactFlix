@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 export const MainHero = styled.section`
   display: flex;
+  justify-content: center;
   align-items: center;
   flex-direction: column;
   height: 100vh;
@@ -21,7 +22,7 @@ export const MainHero = styled.section`
   }
   @media (max-width: 768px) {
     .container {
-      width: 90%;
+      width: 80vw;
       max-width: 70rem;
     }
   }
