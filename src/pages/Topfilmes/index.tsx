@@ -32,6 +32,7 @@ export default function Topfilmes() {
   const [openSnackbar, setOpenSnackbar] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null)
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768)
 
   const apiUrl = import.meta.env.VITE_API_URL
 
@@ -41,7 +42,6 @@ export default function Topfilmes() {
       const cachedData = localStorage.getItem(cacheKey)
 
       if (cachedData) {
-        // eslint-disable-next-line camelcase
         const { results, total_pages }: ApiResponse = JSON.parse(cachedData)
         if (!isPreload) {
           setMovies(results)
@@ -64,7 +64,6 @@ export default function Topfilmes() {
         if (!response.ok) {
           throw new Error('Erro ao buscar filmes')
         }
-        console.log('Response F:', response)
         const data: ApiResponse = await response.json()
         if (!isPreload) {
           setMovies(data.results)
@@ -94,6 +93,16 @@ export default function Topfilmes() {
           fetchMovies(nextPage, true)
         }
       }
+    }
+
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth <= 768)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
     }
   }, [page, fetchMovies, totalPages, isLoading])
 
@@ -125,7 +134,7 @@ export default function Topfilmes() {
         variant="outlined"
       />
       <MoviesGrid>
-        {movies.map((movie) => (
+        {movies.slice(0, isSmallScreen ? 8 : movies.length).map((movie) => (
           <MovieCard key={movie.id} onClick={() => handleOpenModal(movie.id)}>
             <MovieBanner
               src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}

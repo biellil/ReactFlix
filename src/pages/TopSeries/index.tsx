@@ -32,6 +32,7 @@ export default function TopSeries() {
   const [openSnackbar, setOpenSnackbar] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null)
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768)
 
   const apiUrl = import.meta.env.VITE_API_URL
 
@@ -96,6 +97,16 @@ export default function TopSeries() {
         }
       }
     }
+
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth <= 768)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
   }, [page, fetchMovies, totalPages, isLoading])
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
@@ -126,7 +137,7 @@ export default function TopSeries() {
         variant="outlined"
       />
       <MoviesGrid>
-        {movies.map((movie) => (
+        {movies.slice(0, isSmallScreen ? 8 : movies.length).map((movie) => (
           <MovieCard key={movie.id} onClick={() => handleOpenModal(movie.id)}>
             <MovieBanner
               src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
