@@ -4,24 +4,25 @@ Bem-vindos ao ReactFlix, uma aplicação web desenvolvida com React que replica 
 
 Tecnologias Utilizadas
 
-React: Biblioteca principal utilizada para construção da interface do usuário.
-React Router: Navegação entre páginas e roteamento dinâmico.
-fetch: Realização de requisições HTTP para consumir APIs.
-Styled Components: Estilização dos componentes de forma modular e reutilizável.
-Firebase: Autenticação de usuários.
-vecel : hospedagem do projeto.
-@mui/material e @mui/icons-material: Componentes visuais e ícones fornecidos pelo Material-UI para uma interface moderna e consistente.
-React Spring: Biblioteca para animações fluidas e interativas.
-Vite: Ferramenta de build rápida e moderna para desenvolvimento front-end.
-TypeScript: Linguagem de programação que adiciona tipagem estática ao JavaScript, melhorando a qualidade do código.
+React: Biblioteca principal utilizada para construção da interface do usuário.<br/>
+React Router: Navegação entre páginas e roteamento dinâmico.<br/>
+fetch: Realização de requisições HTTP para consumir APIs.<br/>
+Styled Components: Estilização dos componentes de forma modular e reutilizável.<br/>
+Firebase: Autenticação de usuários.<br/>
+vecel : hospedagem do projeto.<br/>
+@mui/material e @mui/icons-material: Componentes visuais e ícones fornecidos pelo Material-UI para uma interface moderna e consistente.<br/>
+React Spring: Biblioteca para animações fluidas e interativas.<br/>
+Vite: Ferramenta de build rápida e moderna para desenvolvimento front-end.<br/>
+TypeScript: Linguagem de programação que adiciona tipagem estática ao JavaScript, melhorando a qualidade do código.<br/>
+
 Funcionalidades Principais
 
-[]Autenticação de Usuários: Registro e login de usuários utilizando Firebase Authentication.
-[x]Catálogo de Filmes: Exibição de um catálogo dinâmico de filmes, obtido através de uma API de terceiros.
-[]Catálogo de Séries: Exibição de um catálogo dinâmico de Séries, obtido através de uma API de terceiros.
-[]Pesquisa e Filtros: Funcionalidade de busca para encontrar filmes e séries específicas, além de filtros por categorias e gêneros.
-[x]Player de Vídeo: Reprodução de conteúdos selecionados diretamente na aplicação.
-[x]Layout Responsivo: Interface adaptada para diversos dispositivos, garantindo uma boa experiência de usuário tanto em desktops quanto em dispositivos móveis.
+[]Autenticação de Usuários: Registro e login de usuários utilizando Firebase Authentication.<br/>
+[x]Catálogo de Filmes: Exibição de um catálogo dinâmico de filmes, obtido através de uma API de terceiros.<br/>
+[]Catálogo de Séries: Exibição de um catálogo dinâmico de Séries, obtido através de uma API de terceiros.<br/>
+[]Pesquisa e Filtros: Funcionalidade de busca para encontrar filmes e séries específicas, além de filtros por categorias e gêneros.<br/>
+[x]Player de Vídeo: Reprodução de conteúdos selecionados diretamente na aplicação.<br/>
+[x]Layout Responsivo: Interface adaptada para diversos dispositivos, garantindo uma boa experiência de usuário tanto em desktops quanto em dispositivos móveis.<br/>
 
 Desafios e Soluções
 
