@@ -1,6 +1,5 @@
 // src/components/ModalPlay/styles.ts
-import { LinearProgress, SxProps, Theme } from '@mui/material'
-import { styled } from 'styled-components'
+import { SxProps, Theme } from '@mui/material'
 
 export const modalStyle: SxProps<Theme> = {
   position: 'absolute',
@@ -14,11 +13,3 @@ export const modalStyle: SxProps<Theme> = {
   boxShadow: 24,
   p: 2,
 }
-export const StyledLinearProgress = styled(LinearProgress)`
-  width: 80%; // Ajuste conforme necessário
-  margin: 20px auto; // Centraliza horizontalmente e adiciona margem vertical
-  background-color: #e0e0e0; // Cor do fundo do LinearProgress
-  .MuiLinearProgress-bar {
-    background-color: #3f51b5; // Cor da barra de progresso
-  }
-`

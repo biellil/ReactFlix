@@ -1,7 +1,21 @@
 // src/components/ModalPlay/ModalPlay.tsx
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { Modal, Box, Typography, Button } from '@mui/material'
-import { modalStyle, StyledLinearProgress } from './styles'
+import { modalStyle } from './styles'
+import { StyledLinearProgress } from '../Loading/styles'
+import { Loading } from '../Loading'
+
+// Definição da função clearCache
+const clearCache = () => {
+  Object.keys(localStorage).forEach((key) => {
+    if (
+      key.startsWith('movies_page_Topfilmes_') ||
+      key.startsWith('movies_page_TopSeries_')
+    ) {
+      localStorage.removeItem(key)
+    }
+  })
+}
 
 interface ContentModalProps {
   open: boolean
@@ -27,6 +41,13 @@ export const ModalPlay: FC<ContentModalProps> = ({
       }${episode ? `/${episode}` : ''}`
     : ''
 
+  // useEffect para limpar o cache quando o modal abrir
+  useEffect(() => {
+    if (open) {
+      clearCache()
+    }
+  }, [open])
+
   return (
     <Modal
       open={open}
@@ -46,11 +67,9 @@ export const ModalPlay: FC<ContentModalProps> = ({
           />
         ) : (
           <Typography variant="body1">
-            <StyledLinearProgress
-              variant="buffer"
-              value={50} // Ajuste conforme necessário
-              valueBuffer={70} // Ajuste conforme necessário
-            />
+            <StyledLinearProgress>
+              <Loading />
+            </StyledLinearProgress>
           </Typography>
         )}
         <Button onClick={onClose} sx={{ mt: 2 }} variant="contained">

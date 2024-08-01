@@ -25,17 +25,6 @@ export function Header({ onCategoryChange, onSearchChange }: HeaderProps) {
     onSearchChange(value)
   }
 
-   const clearCache = () => {
-     Object.keys(localStorage).forEach((key) => {
-       if (
-         key.startsWith("movies_page_Topfilmes_") ||
-         key.startsWith("movies_page_TopSeries_")
-       ) {
-         localStorage.removeItem(key);
-       }
-     });
-   };
-
   return (
     <Headers>
       <img src={icon} alt="Ícone" />
@@ -82,11 +71,6 @@ export function Header({ onCategoryChange, onSearchChange }: HeaderProps) {
           }
         />
       </label>
-       <Button
-        onClick={clearCache}
-        variant="contained"
-        color="secondary"
-      ></Button> 
     </Headers>
   )
 }
