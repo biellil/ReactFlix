@@ -22,6 +22,7 @@ interface ApiResponse {
 }
 
 const PRELOAD_PAGES = import.meta.env.VITE_PRELOAD_PAGES || 3
+const MAX_PAGES_DISPLAYED = 500
 
 export default function TopSeries() {
   const [movies, setMovies] = useState<Movie[]>([])
@@ -42,11 +43,10 @@ export default function TopSeries() {
       const cachedData = localStorage.getItem(cacheKey)
 
       if (cachedData) {
-        // eslint-disable-next-line camelcase
         const { results, total_pages }: ApiResponse = JSON.parse(cachedData)
         if (!isPreload) {
           setMovies(results)
-          setTotalPages(total_pages)
+          setTotalPages(Math.min(total_pages, MAX_PAGES_DISPLAYED)) // Limita o total de páginas exibidas
           setIsLoading(false)
         }
         return
@@ -70,7 +70,7 @@ export default function TopSeries() {
 
         if (!isPreload) {
           setMovies(data.results)
-          setTotalPages(data.total_pages)
+          setTotalPages(Math.min(data.total_pages, MAX_PAGES_DISPLAYED)) // Limita o total de páginas exibidas
           setIsLoading(false)
         }
 

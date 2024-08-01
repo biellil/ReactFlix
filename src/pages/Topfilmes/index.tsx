@@ -22,6 +22,7 @@ interface ApiResponse {
 }
 
 const PRELOAD_PAGES = import.meta.env.VITE_PRELOAD_PAGES || 3
+const MAX_PAGES_DISPLAYED = 500 // Defina o número máximo de páginas a serem exibidas
 
 export default function Topfilmes() {
   const [movies, setMovies] = useState<Movie[]>([])
@@ -45,7 +46,7 @@ export default function Topfilmes() {
         const { results, total_pages }: ApiResponse = JSON.parse(cachedData)
         if (!isPreload) {
           setMovies(results)
-          setTotalPages(total_pages)
+          setTotalPages(Math.min(total_pages, MAX_PAGES_DISPLAYED)) // Limita o total de páginas exibidas
           setIsLoading(false)
         }
         return
@@ -67,7 +68,7 @@ export default function Topfilmes() {
         const data: ApiResponse = await response.json()
         if (!isPreload) {
           setMovies(data.results)
-          setTotalPages(data.total_pages)
+          setTotalPages(Math.min(data.total_pages, MAX_PAGES_DISPLAYED)) // Limita o total de páginas exibidas
           setIsLoading(false)
         }
 
@@ -124,8 +125,6 @@ export default function Topfilmes() {
     setModalOpen(false)
     setSelectedMovieId(null)
   }
-
-
 
   return (
     <TopContainer>
