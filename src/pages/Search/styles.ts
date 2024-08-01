@@ -26,6 +26,14 @@ export const ResultsGrid = styled.div`
     grid-template-columns: repeat(auto-fill, minmax(16vw, 1fr));
     gap: 0.5rem;
   }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 0fr);
+    grid-template-rows: repeat(4, 100px);
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+  }
 `
 
 export const ResultCard = styled.div`
@@ -46,6 +54,10 @@ export const ResultCard = styled.div`
     transform: scale(1.05);
     color: red;
   }
+  @media (max-width: 768px) {
+    width: 9rem;
+    height: 5rem;
+  }
 `
 
 export const ResultBanner = styled.img`
@@ -55,12 +67,16 @@ export const ResultBanner = styled.img`
 
 export const ResultTitle = styled.h3`
   position: absolute;
-  font-size: 11.5px;
-  padding: 0 12px;
+  font-size: 0.9rem;
+  padding: 0 1rem;
   z-index: 10;
   display: flex;
   text-align: center;
-  white-space: nowrap;
+  justify-content: center;
+  width: 12rem;
   text-overflow: ellipsis;
   word-wrap: break-word;
+  @media (max-width: 768px) {
+    width: 9rem;
+  }
 `

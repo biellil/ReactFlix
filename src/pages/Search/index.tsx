@@ -10,6 +10,7 @@ import {
 } from './styles'
 import { ModalPlay } from '../../components/modalPlay'
 import { Loading } from '../../components/Loading'
+import { StyledLinearProgress } from '../../components/Loading/styles'
 
 interface Result {
   id: number
@@ -38,6 +39,7 @@ export default function SearchComponent({ searchTerm }: SearchComponentProps) {
   const [openSnackbar, setOpenSnackbar] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedResultId, setSelectedResultId] = useState<number | null>(null)
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768)
 
   const fetchResults = useCallback(
     async (page: number) => {
@@ -72,6 +74,16 @@ export default function SearchComponent({ searchTerm }: SearchComponentProps) {
     if (searchTerm) {
       fetchResults(page)
     }
+
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth <= 768)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
   }, [searchTerm, page, fetchResults])
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
@@ -95,7 +107,9 @@ export default function SearchComponent({ searchTerm }: SearchComponentProps) {
   return (
     <SearchContainer>
       {isLoading ? (
-        <Loading />
+        <StyledLinearProgress>
+          <Loading />
+        </StyledLinearProgress>
       ) : (
         <>
           <Pagination
@@ -105,18 +119,20 @@ export default function SearchComponent({ searchTerm }: SearchComponentProps) {
             variant="outlined"
           />
           <ResultsGrid>
-            {results.map((result) => (
-              <ResultCard
-                key={result.id}
-                onClick={() => handleOpenModal(result.id)}
-              >
-                <ResultBanner
-                  src={`https://image.tmdb.org/t/p/w500${result.backdrop_path}`}
-                  alt={result.title}
-                />
-                <ResultTitle>{result.title}</ResultTitle>
-              </ResultCard>
-            ))}
+            {results
+              .slice(0, isSmallScreen ? 8 : results.length)
+              .map((result) => (
+                <ResultCard
+                  key={result.id}
+                  onClick={() => handleOpenModal(result.id)}
+                >
+                  <ResultBanner
+                    src={`https://image.tmdb.org/t/p/w500${result.backdrop_path}`}
+                    alt={result.title}
+                  />
+                  <ResultTitle>{result.title}</ResultTitle>
+                </ResultCard>
+              ))}
           </ResultsGrid>
         </>
       )}

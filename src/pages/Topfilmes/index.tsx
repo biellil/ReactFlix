@@ -125,6 +125,8 @@ export default function Topfilmes() {
     setSelectedMovieId(null)
   }
 
+
+
   return (
     <TopContainer>
       <Pagination
