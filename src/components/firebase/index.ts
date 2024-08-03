@@ -1,7 +1,7 @@
 // src/components/firebase.ts
 import { initializeApp } from 'firebase/app'
-
 import { getAnalytics } from 'firebase/analytics'
+import { getPerformance } from 'firebase/performance'
 import {
   getAuth,
   GoogleAuthProvider,
@@ -9,6 +9,7 @@ import {
   OAuthProvider,
 } from 'firebase/auth'
 
+// Configuração do Firebase
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -22,7 +23,7 @@ const firebaseConfig = {
 // Inicializa o app Firebase
 const app = initializeApp(firebaseConfig)
 const analytics = getAnalytics(app)
-
+const performance = getPerformance(app)
 // Configura a autenticação e os provedores
 const auth = getAuth(app)
 const googleProvider = new GoogleAuthProvider()
@@ -50,4 +51,4 @@ const signInWithApple = async () => {
   }
 }
 
-export { analytics, signInWithGoogle, signInWithApple }
+export { analytics, signInWithGoogle, signInWithApple, performance }
