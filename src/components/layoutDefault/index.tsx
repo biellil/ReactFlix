@@ -41,13 +41,16 @@ export default function DefaultLayout() {
   }
 
   return (
-    <LayoutContainer className="container">
-      <Header
-        onCategoryChange={handleCategoryChange}
-        onSearchChange={handleSearchChange}
-      />
-      <Suspense fallback={<Loading />}>{renderContent()}</Suspense>
+    <>
+      <LayoutContainer className="container">
+        <Header
+          onCategoryChange={handleCategoryChange}
+          onSearchChange={handleSearchChange}
+        />
+        <Suspense fallback={<Loading />}>{renderContent()}</Suspense>
+      </LayoutContainer>
       <AdSenseAd />
-    </LayoutContainer>
+      {/* <VerticalAd /> */}
+    </>
   )
 }
