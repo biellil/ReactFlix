@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Pagination, Alert, Snackbar, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
+import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   TopContainer,
   MoviesGrid,
@@ -11,91 +12,77 @@ import {
 import { ModalPlay } from '../../components/modalPlay'
 
 interface Movie {
-  id: number
+  adult: boolean
   backdrop_path: string
+  genre_ids: number[]
+  id: number
+  original_language: string
+  original_title: string
+  overview: string
+  popularity: number
+  poster_path: string
+  release_date: string
   title: string
+  video: boolean
+  vote_average: number
+  vote_count: number
 }
 
 interface ApiResponse {
+  page: number
   results: Movie[]
   total_pages: number
+  total_results: number
 }
 
 const PRELOAD_PAGES = import.meta.env.VITE_PRELOAD_PAGES || 3
-const MAX_PAGES_DISPLAYED = 500 // Defina o número máximo de páginas a serem exibidas
+const MAX_PAGES_DISPLAYED = 500
 
 export default function Topfilmes() {
-  const [movies, setMovies] = useState<Movie[]>([])
   const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
   const [openSnackbar, setOpenSnackbar] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null)
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768)
 
   const apiUrl = import.meta.env.VITE_API_URL
+  const queryClient = useQueryClient()
 
-  const fetchMovies = useCallback(
-    async (page: number, isPreload = false) => {
-      const cacheKey = `movies_page_Topfilmes_${page}`
-      const cachedData = localStorage.getItem(cacheKey)
+  const fetchMovies = async (page: number): Promise<ApiResponse> => {
+    const response = await fetch(
+      `${apiUrl}/movie/popular?language=pt-BR&page=${page}`,
+      {
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
+          accept: 'application/json',
+        },
+      },
+    )
+    if (!response.ok) {
+      throw new Error('Erro ao buscar filmes')
+    }
+    return response.json()
+  }
 
-      if (cachedData) {
-        const { results, total_pages }: ApiResponse = JSON.parse(cachedData)
-        if (!isPreload) {
-          setMovies(results)
-          setTotalPages(Math.min(total_pages, MAX_PAGES_DISPLAYED)) // Limita o total de páginas exibidas
-          setIsLoading(false)
-        }
-        return
-      }
-
-      try {
-        const response = await fetch(
-          `${apiUrl}/movie/popular?language=pt-BR&page=${page}`,
-          {
-            headers: {
-              Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
-              accept: 'application/json',
-            },
-          },
-        )
-        if (!response.ok) {
-          throw new Error('Erro ao buscar filmes')
-        }
-        const data: ApiResponse = await response.json()
-        if (!isPreload) {
-          setMovies(data.results)
-          setTotalPages(Math.min(data.total_pages, MAX_PAGES_DISPLAYED)) // Limita o total de páginas exibidas
-          setIsLoading(false)
-        }
-
-        localStorage.setItem(cacheKey, JSON.stringify(data))
-      } catch (error) {
-        if (!isPreload) {
-          setError((error as Error).message)
-          setOpenSnackbar(true)
-          setIsLoading(false)
+  const { data, isError, error } = useQuery<ApiResponse, Error>({
+    queryKey: ['Topfilmes', page],
+    queryFn: () => fetchMovies(page),
+    placeholderData: keepPreviousData,
+    onSuccess: (data: { total_pages: number }) => {
+      // Pré-carregar páginas futuras
+      for (let i = 1; i <= PRELOAD_PAGES; i++) {
+        const nextPage = page + i
+        if (nextPage <= data.total_pages && nextPage <= MAX_PAGES_DISPLAYED) {
+          queryClient.prefetchQuery({
+            queryKey: ['Topfilmes', nextPage],
+            queryFn: () => fetchMovies(nextPage),
+          })
         }
       }
     },
-    [apiUrl],
-  )
+  })
 
   useEffect(() => {
-    fetchMovies(page)
-
-    if (!isLoading) {
-      for (let i = 1; i <= PRELOAD_PAGES; i++) {
-        const nextPage = page + i
-        if (nextPage <= totalPages) {
-          fetchMovies(nextPage, true)
-        }
-      }
-    }
-
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth <= 768)
     }
@@ -105,11 +92,10 @@ export default function Topfilmes() {
     return () => {
       window.removeEventListener('resize', handleResize)
     }
-  }, [page, fetchMovies, totalPages, isLoading])
+  }, [])
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value)
-    setIsLoading(true)
   }
 
   const handleCloseSnackbar = () => {
@@ -129,27 +115,29 @@ export default function Topfilmes() {
   return (
     <TopContainer>
       <Pagination
-        count={totalPages}
+        count={data ? Math.min(data.total_pages, MAX_PAGES_DISPLAYED) : 1}
         page={page}
         onChange={handlePageChange}
         variant="outlined"
       />
       <MoviesGrid>
-        {movies.slice(0, isSmallScreen ? 8 : movies.length).map((movie) => (
-          <MovieCard key={movie.id} onClick={() => handleOpenModal(movie.id)}>
-            <MovieBanner
-              src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
-              alt={movie.title}
-            />
-            <MovieTitle>{movie.title}</MovieTitle>
-          </MovieCard>
-        ))}
+        {data?.results
+          .slice(0, isSmallScreen ? 8 : data.results.length)
+          .map((movie) => (
+            <MovieCard key={movie.id} onClick={() => handleOpenModal(movie.id)}>
+              <MovieBanner
+                src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
+                alt={movie.title}
+              />
+              <MovieTitle>{movie.title}</MovieTitle>
+            </MovieCard>
+          ))}
       </MoviesGrid>
       <Snackbar
-        open={openSnackbar}
+        open={isError && openSnackbar}
         autoHideDuration={6000}
         onClose={handleCloseSnackbar}
-        message={error}
+        message={error?.message}
         action={
           <IconButton
             size="small"
@@ -166,7 +154,7 @@ export default function Topfilmes() {
           severity="error"
           sx={{ width: '100%' }}
         >
-          {error}
+          {error?.message}
         </Alert>
       </Snackbar>
       <ModalPlay

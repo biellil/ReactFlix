@@ -79,7 +79,7 @@ export const MovieTitle = styled.h3`
   display: flex;
   text-align: center;
   justify-content: center;
-
+  width: 12rem;
   text-overflow: ellipsis;
   word-wrap: break-word;
   @media (max-width: 768px) {
