@@ -1,5 +1,5 @@
 // src/App.tsx
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import { Routers } from './Router'
 import { MainHero } from './styles/styles'
@@ -8,6 +8,10 @@ import { logEvent } from 'firebase/analytics'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import { trace } from 'firebase/performance'
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
 
 export function App() {
   useEffect(() => {
@@ -29,7 +33,9 @@ export function App() {
     <MainHero>
       <BrowserRouter>
         <Analytics />
-        <Routers />
+        <QueryClientProvider client={queryClient}>
+          <Routers />
+        </QueryClientProvider>
         <SpeedInsights />
       </BrowserRouter>
     </MainHero>
