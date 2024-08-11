@@ -10,6 +10,7 @@ export const Headers = styled.header`
   margin-bottom: 1rem;
 
   img {
+    height: 25px;
     display: flex;
 
     @media (max-width: 768px) {

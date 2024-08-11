@@ -37,8 +37,8 @@ export function Header({ onCategoryChange, onSearchChange }: HeaderProps) {
           <h2>Filmes</h2>
         </div>
         <div
-          // onClick={() => handleCategoryChange('Series')}
-          className={activeCategory === 'Series' ? 'active' : 'not-allowed'}
+          onClick={() => handleCategoryChange('Series')}
+          className={activeCategory === 'Series' ? 'active' : ' '}
         >
           <FilmScript size={32} weight="fill" />
           <h2>Series</h2>
@@ -58,7 +58,7 @@ export function Header({ onCategoryChange, onSearchChange }: HeaderProps) {
         <OutlinedInput
           type="text"
           id="search"
-          placeholder="Buscar filmes..."
+          placeholder="Buscar filmes ou Series"
           value={searchTerm}
           onChange={handleSearchChange}
           autoComplete="off"
