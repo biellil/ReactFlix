@@ -21,6 +21,11 @@ export function Routers() {
         {/* <Route path="/" element={<Auth />}> */}
         <Route path="/" element={<DefaultLayout />} />
         <Route path="/filmes/:contentId" element={<DefaultLayout />} />
+        <Route
+          path="/
+        Series/:contentId"
+          element={<DefaultLayout />}
+        />
         {/* </Route> */}
       </Routes>
     </Suspense>
