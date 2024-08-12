@@ -19,7 +19,7 @@ export function Routers() {
     >
       <Routes>
         {/* <Route path="/" element={<Auth />}> */}
-        <Route path="/" element={<DefaultLayout />} />
+        <Route path="/" exact element={<DefaultLayout />} />
         <Route path="/filmes/:contentId" element={<DefaultLayout />} />
         <Route
           path="/
