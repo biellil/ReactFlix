@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import { Suspense, lazy } from 'react'
 import { Loading } from './components/Loading'
 import { LoadingContainer } from './components/Loading/styles'
+// import Auth from './pages/auth'
 
 const DefaultLayout = lazy(() => import('./components/layoutDefault'))
 // const Auth = lazy(() => import('./pages/auth'))
@@ -19,6 +20,7 @@ export function Routers() {
       <Routes>
         {/* <Route path="/" element={<Auth />}> */}
         <Route path="/" element={<DefaultLayout />} />
+        <Route path="/filmes/:contentId" element={<DefaultLayout />} />
         {/* </Route> */}
       </Routes>
     </Suspense>
