@@ -8,7 +8,7 @@ export const MainHero = styled.section`
   height: 100vh;
   width: 100vw;
   .container {
-    height: 95vh;
+    height: 85vh;
     width: 95vw;
     max-width: 75rem;
     background-color: rgb(15 15 15 / 0.7);
