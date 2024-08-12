@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Pagination, Alert, Snackbar, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
-import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query'
 import {
   TopContainer,
   MoviesGrid,
@@ -9,7 +14,7 @@ import {
   MovieBanner,
   MovieTitle,
 } from './styles'
-import { ModalPlay } from '../../components/modalPlay'
+import { ModalPreview } from '../../components/ModalPreview'
 
 interface Movie {
   adult: boolean
@@ -41,12 +46,12 @@ const MAX_PAGES_DISPLAYED = 500
 export default function Topfilmes() {
   const [page, setPage] = useState(1)
   const [openSnackbar, setOpenSnackbar] = useState(false)
-  const [modalOpen, setModalOpen] = useState(false)
-  const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null)
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768)
 
   const apiUrl = import.meta.env.VITE_API_URL
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
+  const { contentId } = useParams<{ contentId?: string }>()
 
   const fetchMovies = async (page: number): Promise<ApiResponse> => {
     const response = await fetch(
@@ -69,7 +74,6 @@ export default function Topfilmes() {
     queryFn: () => fetchMovies(page),
     placeholderData: keepPreviousData,
     onSuccess: (data: { total_pages: number }) => {
-      // Pré-carregar páginas futuras
       for (let i = 1; i <= PRELOAD_PAGES; i++) {
         const nextPage = page + i
         if (nextPage <= data.total_pages && nextPage <= MAX_PAGES_DISPLAYED) {
@@ -102,15 +106,16 @@ export default function Topfilmes() {
     setOpenSnackbar(false)
   }
 
-  const handleOpenModal = (id: number) => {
-    setSelectedMovieId(id)
-    setModalOpen(true)
+  const handleOpenModal = (movie: Movie) => {
+    navigate(`/filmes/${movie.id}`)
   }
 
   const handleCloseModal = () => {
-    setModalOpen(false)
-    setSelectedMovieId(null)
+    navigate('/')
   }
+
+  const selectedMovie =
+    data?.results.find((movie) => movie.id.toString() === contentId) || null
 
   return (
     <TopContainer>
@@ -124,7 +129,7 @@ export default function Topfilmes() {
         {data?.results
           .slice(0, isSmallScreen ? 8 : data.results.length)
           .map((movie) => (
-            <MovieCard key={movie.id} onClick={() => handleOpenModal(movie.id)}>
+            <MovieCard key={movie.id} onClick={() => handleOpenModal(movie)}>
               <MovieBanner
                 src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
                 alt={movie.title}
@@ -157,12 +162,20 @@ export default function Topfilmes() {
           {error?.message}
         </Alert>
       </Snackbar>
-      <ModalPlay
-        open={modalOpen}
-        onClose={handleCloseModal}
-        contentId={selectedMovieId?.toString() || ''}
-        contentType="filme"
-      />
+      {selectedMovie && (
+        <ModalPreview
+          type="filmes"
+          open={Boolean(contentId)}
+          onClose={handleCloseModal}
+          contentId={selectedMovie.id.toString()}
+          contentType="filme"
+          title={selectedMovie.title}
+          overview={selectedMovie.overview}
+          posterPath={selectedMovie.poster_path}
+          vote_average={selectedMovie.vote_average}
+          release_date={selectedMovie.release_date}
+        />
+      )}
     </TopContainer>
   )
 }
