@@ -13,6 +13,8 @@ export default defineConfig({
     viteCompression({ algorithm: 'brotliCompress' }),
   ],
   build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
     rollupOptions: {
       output: {
         manualChunks(id) {
