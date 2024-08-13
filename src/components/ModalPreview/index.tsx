@@ -1,19 +1,18 @@
-import { FC, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Modal, Typography, Button, CardMedia, Rating } from '@mui/material'
-import { CardStyle, ModalStyle, CardContent, RatingDiv } from './styles'
-import { Play } from '@phosphor-icons/react'
-import { ModalPlay } from '../modalPlay'
+import { FC, useState } from "react";
+import { Modal, Typography, Button, CardMedia, Rating } from "@mui/material";
+import { CardStyle, ModalStyle, CardContent, RatingDiv } from "./styles";
+import { Play } from "@phosphor-icons/react";
+import { ModalPlay } from "../modalPlay";
 
 interface ContentPreviewProps {
-  contentId: string | null
-  contentType: 'filme' | 'serie'
-  title: string
-  overview: string
-  posterPath: string
-  vote_average: number
-  release_date: string
-  type: string
+  contentId: string | null;
+  contentType: "filme" | "serie";
+  title: string;
+  overview: string;
+  posterPath: string;
+  vote_average: number;
+  release_date: string;
+  type: string;
 }
 
 export const ModalPreview: FC<ContentPreviewProps> = ({
@@ -26,35 +25,30 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
   release_date,
   type,
 }) => {
-  const navigate = useNavigate()
-  const [modalOpen, setModalOpen] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false);
 
   const handleClose = () => {
-    navigate('/')
-  }
+    setModalOpen(false);
+  };
 
   const handleOpenModalPlay = () => {
-    setModalOpen(true)
-  }
-
-  const handleCloseModalPlay = () => {
-    setModalOpen(false)
-  }
+    setModalOpen(true);
+  };
 
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }
-    const date = new Date(dateString)
-    return date.toLocaleDateString('pt-BR', options)
-  }
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    const date = new Date(dateString);
+    return date.toLocaleDateString("pt-BR", options);
+  };
 
   return (
     <Modal
       open={Boolean(contentId)}
-      onClose={handleClose}
+      onClose={handleClose} // This will close the modal when clicking outside of it
       aria-labelledby={title}
     >
       <ModalStyle>
@@ -100,11 +94,11 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
         </CardStyle>
         <ModalPlay
           open={modalOpen}
-          onClose={handleCloseModalPlay}
+          onClose={handleClose} // This will close the nested modal when clicked
           contentId={contentId}
           contentType={contentType}
         />
       </ModalStyle>
     </Modal>
-  )
-}
+  );
+};
