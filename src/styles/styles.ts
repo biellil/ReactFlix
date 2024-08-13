@@ -21,6 +21,11 @@ export const MainHero = styled.section`
     display: flex;
     flex-direction: column;
   }
+  @media (max-width: 999px) {
+    .container {
+      height: 95vh;
+    }
+  }
   @media (max-width: 768px) {
     .container {
       width: 80vw;
