@@ -8,14 +8,14 @@ import {
   MovieBanner,
   MovieTitle,
 } from './styles'
-import { ModalPlay } from '../../components/modalPlay'
+import { ModalPreview } from '../../components/ModalPreview'
 import {
   keepPreviousData,
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query'
 
-interface Movie {
+interface Series {
   adult: boolean
   backdrop_path: string
   genre_ids: number[]
@@ -34,7 +34,7 @@ interface Movie {
 
 interface ApiResponse {
   page: number
-  results: Movie[]
+  results: Series[]
   total_pages: number
   total_results: number
 }
@@ -45,14 +45,13 @@ const MAX_PAGES_DISPLAYED = 500
 export default function TopSeries() {
   const [page, setPage] = useState(1)
   const [openSnackbar, setOpenSnackbar] = useState(false)
-  const [modalOpen, setModalOpen] = useState(false)
-  const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null)
+  const [selectedSeries, setSelectedSeries] = useState<Series | null>(null)
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768)
 
   const apiUrl = import.meta.env.VITE_API_URL
   const queryClient = useQueryClient()
 
-  const fetchMovies = async (page: number): Promise<ApiResponse> => {
+  const fetchSeries = async (page: number): Promise<ApiResponse> => {
     const response = await fetch(
       `${apiUrl}/tv/top_rated?language=pt-BR&page=${page}`,
       {
@@ -65,13 +64,12 @@ export default function TopSeries() {
     if (!response.ok) {
       throw new Error('Erro ao buscar séries')
     }
-    console.log(response)
     return response.json()
   }
 
-  const { data, isLoading, isError, error } = useQuery<ApiResponse, Error>({
+  const { data, isError, error } = useQuery<ApiResponse, Error>({
     queryKey: ['TopSeries', page],
-    queryFn: () => fetchMovies(page),
+    queryFn: () => fetchSeries(page),
     placeholderData: keepPreviousData,
     onSuccess: (data) => {
       for (let i = 1; i <= PRELOAD_PAGES; i++) {
@@ -79,7 +77,7 @@ export default function TopSeries() {
         if (nextPage <= data.total_pages && nextPage <= MAX_PAGES_DISPLAYED) {
           queryClient.prefetchQuery({
             queryKey: ['TopSeries', nextPage],
-            queryFn: () => fetchMovies(nextPage),
+            queryFn: () => fetchSeries(nextPage),
           })
         }
       }
@@ -106,14 +104,12 @@ export default function TopSeries() {
     setOpenSnackbar(false)
   }
 
-  const handleOpenModal = (id: number) => {
-    setSelectedMovieId(id)
-    setModalOpen(true)
+  const handleOpenModal = (series: Series) => {
+    setSelectedSeries(series)
   }
 
   const handleCloseModal = () => {
-    setModalOpen(false)
-    setSelectedMovieId(null)
+    setSelectedSeries(null)
   }
 
   return (
@@ -127,13 +123,13 @@ export default function TopSeries() {
       <MoviesGrid>
         {data?.results
           .slice(0, isSmallScreen ? 8 : data.results.length)
-          .map((movie) => (
-            <MovieCard key={movie.id} onClick={() => handleOpenModal(movie.id)}>
+          .map((series) => (
+            <MovieCard key={series.id} onClick={() => handleOpenModal(series)}>
               <MovieBanner
-                src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
-                alt={movie.name}
+                src={`https://image.tmdb.org/t/p/w500${series.backdrop_path}`}
+                alt={series.name}
               />
-              <MovieTitle>{movie.name}</MovieTitle>
+              <MovieTitle>{series.name}</MovieTitle>
             </MovieCard>
           ))}
       </MoviesGrid>
@@ -161,12 +157,20 @@ export default function TopSeries() {
           {error?.message}
         </Alert>
       </Snackbar>
-      <ModalPlay
-        open={modalOpen}
-        onClose={handleCloseModal}
-        contentId={selectedMovieId?.toString() || ''}
-        contentType="serie"
-      />
+      {selectedSeries && (
+        <ModalPreview
+          type="series"
+          open={Boolean(selectedSeries)}
+          onClose={handleCloseModal}
+          contentId={selectedSeries.id.toString()}
+          contentType="serie"
+          title={selectedSeries.name}
+          overview={selectedSeries.overview}
+          posterPath={selectedSeries.poster_path}
+          vote_average={selectedSeries.vote_average}
+          release_date={selectedSeries.first_air_date}
+        />
+      )}
     </HomeContainer>
   )
 }
