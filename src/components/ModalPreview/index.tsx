@@ -1,21 +1,25 @@
-import { FC, useState } from "react";
-import { Modal, Typography, Button, CardMedia, Rating } from "@mui/material";
-import { CardStyle, ModalStyle, CardContent, RatingDiv } from "./styles";
-import { Play } from "@phosphor-icons/react";
-import { ModalPlay } from "../modalPlay";
+import { FC, useState } from 'react'
+import { Modal, Typography, Button, CardMedia, Rating } from '@mui/material'
+import { CardStyle, ModalStyle, CardContent, RatingDiv } from './styles'
+import { Play } from '@phosphor-icons/react'
+import { ModalPlay } from '../modalPlay'
 
 interface ContentPreviewProps {
-  contentId: string | null;
-  contentType: "filme" | "serie";
-  title: string;
-  overview: string;
-  posterPath: string;
-  vote_average: number;
-  release_date: string;
-  type: string;
+  open: boolean
+  onClose: () => void
+  contentId: string | null
+  contentType: 'filme' | 'serie'
+  title: string
+  overview: string
+  posterPath: string
+  vote_average: number
+  release_date: string
+  type: string
 }
 
 export const ModalPreview: FC<ContentPreviewProps> = ({
+  open,
+  onClose,
   contentId,
   contentType,
   vote_average,
@@ -25,32 +29,28 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
   release_date,
   type,
 }) => {
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const handleClose = () => {
-    setModalOpen(false);
-  };
+  const [modalPlayOpen, setModalPlayOpen] = useState(false)
 
   const handleOpenModalPlay = () => {
-    setModalOpen(true);
-  };
+    setModalPlayOpen(true)
+  }
+
+  const handleCloseModalPlay = () => {
+    setModalPlayOpen(false)
+  }
 
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    const date = new Date(dateString);
-    return date.toLocaleDateString("pt-BR", options);
-  };
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }
+    const date = new Date(dateString)
+    return date.toLocaleDateString('pt-BR', options)
+  }
 
   return (
-    <Modal
-      open={Boolean(contentId)}
-      onClose={handleClose} // This will close the modal when clicking outside of it
-      aria-labelledby={title}
-    >
+    <Modal open={open} onClose={onClose} aria-labelledby={title}>
       <ModalStyle>
         <CardStyle>
           <CardMedia
@@ -87,18 +87,18 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
               {overview}
             </Typography>
 
-            <Button onClick={handleClose} sx={{ mt: 2 }} variant="contained">
+            <Button onClick={onClose} sx={{ mt: 2 }} variant="contained">
               Fechar
             </Button>
           </CardContent>
         </CardStyle>
         <ModalPlay
-          open={modalOpen}
-          onClose={handleClose} // This will close the nested modal when clicked
+          open={modalPlayOpen}
+          onClose={handleCloseModalPlay}
           contentId={contentId}
           contentType={contentType}
         />
       </ModalStyle>
     </Modal>
-  );
-};
+  )
+}
