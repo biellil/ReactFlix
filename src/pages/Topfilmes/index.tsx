@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Pagination, Alert, Snackbar, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import {
@@ -47,11 +47,11 @@ export default function Topfilmes() {
   const [page, setPage] = useState(1)
   const [openSnackbar, setOpenSnackbar] = useState(false)
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768)
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null)
 
   const apiUrl = import.meta.env.VITE_API_URL
   const queryClient = useQueryClient()
   const navigate = useNavigate()
-  const { contentId } = useParams<{ contentId?: string }>()
 
   const fetchMovies = async (page: number): Promise<ApiResponse> => {
     const response = await fetch(
@@ -107,15 +107,12 @@ export default function Topfilmes() {
   }
 
   const handleOpenModal = (movie: Movie) => {
-    navigate(`/filmes/${movie.id}`)
+    setSelectedMovie(movie)
   }
 
   const handleCloseModal = () => {
-    navigate('/')
+    setSelectedMovie(null)
   }
-
-  const selectedMovie =
-    data?.results.find((movie) => movie.id.toString() === contentId) || null
 
   return (
     <TopContainer>
@@ -165,7 +162,7 @@ export default function Topfilmes() {
       {selectedMovie && (
         <ModalPreview
           type="filmes"
-          open={Boolean(contentId)}
+          open={Boolean(selectedMovie)}
           onClose={handleCloseModal}
           contentId={selectedMovie.id.toString()}
           contentType="filme"
