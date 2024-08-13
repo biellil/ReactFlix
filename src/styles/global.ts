@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material/styles'
 import { createGlobalStyle } from 'styled-components'
-import background from '../assets/22.jpg'
+import background from '../assets/fundo-preto-background.png'
 
 // Definindo os temas
 export const lightTheme = createTheme({

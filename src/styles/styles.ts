@@ -28,7 +28,7 @@ export const MainHero = styled.section`
   }
   @media (max-width: 768px) {
     .container {
-      width: 80vw;
+      width: 81vw;
       max-width: 70rem;
     }
   }
