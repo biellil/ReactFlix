@@ -3,17 +3,40 @@ import { Box, styled, Card } from '@mui/material'
 
 export const ModalStyle = styled(Box)`
   position: absolute;
-  top: 50%;
+  top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 75%;
-  height: 75%;
+
   background: 'background.paper';
-  box-shadow: 24;
+  box-shadow: 24px;
   padding: 2rem;
-  div {
+
+  > div {
     background: 'background.paper';
-    border-radius: 25px;
+    height: 80vh;
+    width: 95vw;
+    max-width: 75rem;
+  }
+
+  .Rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 999px) {
+    > div {
+      height: 95vh;
+    }
+  }
+  @media (max-width: 768px) {
+    top: 50%;
+    left: 50%;
+    > div {
+      width: 75vw;
+      height: 75vh;
+      max-width: 70rem;
+    }
   }
 `
 export const CardStyle = styled(Card)`
@@ -21,17 +44,22 @@ export const CardStyle = styled(Card)`
   display: flex;
 
   img {
-    height: 75vh;
+    height: 80vh;
     width: 35vw;
     display: flex;
     align-items: center;
     justify-content: center;
+    @media (max-width: 768px) {
+      height: 75vh;
+      width: 35vw;
+    }
   }
 
   svg {
   }
 
   .divplay {
+    border-radius: 25px;
     position: absolute;
     top: 49%;
     left: 18%;
@@ -46,6 +74,7 @@ export const CardStyle = styled(Card)`
     :hover {
       /* border: 1px solid red; */
       transform: scale(1.05);
+      background: red;
     }
   }
 `
@@ -56,6 +85,6 @@ export const CardContent = styled(Card)`
   gap: 1rem;
 `
 export const RatingDiv = styled(Box)`
-  display: flex;
-  justify-content: space-evenly;
+  /* display: flex;
+  justify-content: space-evenly; */
 `

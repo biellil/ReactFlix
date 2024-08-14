@@ -68,17 +68,23 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
               {title}
             </Typography>
 
-            <RatingDiv>
+            <Typography variant="body2" color="text.secondary">
+              Data de lançamento: {formatDate(release_date)}
+            </Typography>
+            <div className="Rating">
+              Nota Média:
               <Rating
                 readOnly
                 name="text-feedback"
                 value={vote_average}
                 max={10}
+                className="Rating"
               />
               <Typography variant="body2" color="text.secondary">
-                Lançamento: {formatDate(release_date)}
+                {vote_average}
               </Typography>
-            </RatingDiv>
+            </div>
+
             <Typography variant="h5" component="h5">
               SINOPSE
             </Typography>
