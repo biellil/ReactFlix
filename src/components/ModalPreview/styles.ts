@@ -59,22 +59,13 @@ export const CardStyle = styled(Card)`
   }
 
   .divplay {
-    border-radius: 25px;
-    position: absolute;
-    top: 49%;
-    left: 18%;
+    margin-top: 12rem;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #0006;
-    width: 5rem;
-    height: 5rem;
-    cursor: pointer;
-
-    :hover {
-      /* border: 1px solid red; */
-      transform: scale(1.05);
-      background: red;
+    justify-content: space-evenly;
+    flex-direction: column;
+    gap: 2rem;
+    button {
+      gap: 0.5rem;
     }
   }
 `

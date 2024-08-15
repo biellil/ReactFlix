@@ -59,15 +59,20 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
             height="300vh"
             image={`https://image.tmdb.org/t/p/w500${posterPath}`}
           />
-          <div className="divplay" onClick={handleOpenModalPlay}>
-            <Play size={32} color="#ffffff" weight="fill" />
-          </div>
 
           <CardContent>
             <Typography variant="h3" component="h5">
               {title}
             </Typography>
 
+
+            <Typography variant="h5" component="h5">
+              SINOPSE
+            </Typography>
+
+            <Typography variant="body3" color="text.secondary">
+              {overview}
+            </Typography>
             <Typography variant="body2" color="text.secondary">
               Data de lançamento: {formatDate(release_date)}
             </Typography>
@@ -85,17 +90,15 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
               </Typography>
             </div>
 
-            <Typography variant="h5" component="h5">
-              SINOPSE
-            </Typography>
-
-            <Typography variant="body2" color="text.secondary">
-              {overview}
-            </Typography>
-
-            <Button onClick={onClose} sx={{ mt: 2 }} variant="contained">
-              Fechar
-            </Button>
+            <div className="divplay">
+              <Button onClick={handleOpenModalPlay} variant="contained">
+                <Play size={32} color="#ffffff" weight="fill" />
+                começar a assistir
+              </Button>
+              <Button onClick={onClose} variant="contained">
+                Fechar
+              </Button>
+            </div>
           </CardContent>
         </CardStyle>
         <ModalPlay
