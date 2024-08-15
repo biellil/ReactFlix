@@ -3,7 +3,7 @@ import { Ins } from './styles'
 export const AdSenseAd: React.FC = () => {
   return (
     <>
-        <script>(function(d,z,s){s.src='https://'+d+'/400/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('loajawun.com',7902167,document.createElement('script'))</script>
+    
       <script
         src="https://uwoaptee.com/act/files/tag.min.js?z=7902143"
         data-cfasync="false"
