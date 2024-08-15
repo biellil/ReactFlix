@@ -8,6 +8,12 @@ export const AdSenseAd: React.FC = () => {
         data-cfasync="false"
         async
       ></script>
+      <script
+        src="https://alwingulla.com/88/tag.min.js"
+        data-zone="89233"
+        async
+        data-cfasync="false"
+      ></script>
       <Ins
         className="adsbygoogle"
         style={{ display: 'block' }}
