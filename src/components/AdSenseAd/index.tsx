@@ -3,17 +3,6 @@ import { Ins } from './styles'
 export const AdSenseAd: React.FC = () => {
   return (
     <>
-      <script
-        src="https://atshroomisha.com/act/files/tag.min.js?z=7902016"
-        data-cfasync="false"
-        async
-      ></script>
-      <script
-        src="https://alwingulla.com/88/tag.min.js"
-        data-zone="89233"
-        async
-        data-cfasync="false"
-      ></script>
       <Ins
         className="adsbygoogle"
         style={{ display: 'block' }}
