@@ -76,6 +76,17 @@ export const CardStyle = styled(Card)`
       margin-top: 5rem;
     }
   }
+  h5 {
+    @media (max-width: 999px) {
+      font-size: 0.8rem;
+    }
+  }
+
+  h6 {
+    @media (max-width: 999px) {
+      font-size: 0.8rem;
+    }
+  }
 `
 export const CardContent = styled(Card)`
   display: flex;
