@@ -66,7 +66,7 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
             </Typography>
 
 
-            <Typography variant="h5" component="h5">
+            <Typography variant="body3" component="h5">
               SINOPSE
             </Typography>
 
