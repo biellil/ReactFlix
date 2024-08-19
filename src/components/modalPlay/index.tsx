@@ -11,7 +11,7 @@ const clearCache = () => {
   Object.keys(localStorage).forEach((key) => {
     if (
       key.startsWith('movies_page_Topfilmes_') ||
-      key.startswith('movies_page_TopSeries_')
+      key.startsWith('movies_page_TopSeries_')
     ) {
       localStorage.removeItem(key);
     }
