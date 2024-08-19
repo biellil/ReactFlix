@@ -53,7 +53,7 @@ export default function TopSeries() {
 
   const fetchSeries = async (page: number): Promise<ApiResponse> => {
     const response = await fetch(
-      `${apiUrl}/tv/top_rated?language=pt-BR&page=${page}`,
+      `${apiUrl}/tv/popular?language=pt-BR&page=${page}`,
       {
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
@@ -114,12 +114,6 @@ export default function TopSeries() {
 
   return (
     <HomeContainer>
-      <Pagination
-        count={data ? Math.min(data.total_pages, MAX_PAGES_DISPLAYED) : 1}
-        page={page}
-        onChange={handlePageChange}
-        variant="outlined"
-      />
       <MoviesGrid>
         {data?.results
           .slice(0, isSmallScreen ? 8 : data.results.length)
@@ -171,6 +165,12 @@ export default function TopSeries() {
           release_date={selectedSeries.first_air_date}
         />
       )}
+      <Pagination
+        count={data ? Math.min(data.total_pages, MAX_PAGES_DISPLAYED) : 1}
+        page={page}
+        onChange={handlePageChange}
+        variant="outlined"
+      />
     </HomeContainer>
   )
 }
