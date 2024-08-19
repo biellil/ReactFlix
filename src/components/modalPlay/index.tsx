@@ -27,6 +27,10 @@ interface ContentModalProps {
   episode?: string
 }
 
+// Leitura das variáveis de ambiente
+const USE_IMDB_FOR_FILMS = import.meta.env.VITE_USE_IMDB_FOR_FILMS === 'true'
+const USE_IMDB_FOR_SERIES = import.meta.env.VITE_USE_IMDB_FOR_SERIES === 'true'
+
 export const ModalPlay: FC<ContentModalProps> = ({
   open,
   onClose,
@@ -38,21 +42,30 @@ export const ModalPlay: FC<ContentModalProps> = ({
   const [imdbId, setImdbId] = useState<string | null>(null)
 
   useEffect(() => {
+    console.log('VITE_USE_IMDB_FOR_FILMS:', USE_IMDB_FOR_FILMS)
+    console.log('VITE_USE_IMDB_FOR_SERIES:', USE_IMDB_FOR_SERIES)
     if (contentId) {
       if (contentType === 'filme') {
-        // Buscar o IMDb ID correspondente ao TMDB ID para filmes
-        const movie = moviesData.find((m: any) => m.tmdbID === contentId)
-        if (movie) {
-          setImdbId(movie.imdbID)
+        if (USE_IMDB_FOR_FILMS) {
+          // Buscar o IMDb ID correspondente ao TMDB ID para filmes
+          const movie = moviesData.find((m: any) => m.tmdbID === contentId)
+          if (movie) {
+            setImdbId(movie.imdbID)
+          }
+        } else {
+          // Usar TMDB ID diretamente para filmes
+          setImdbId(contentId)
         }
       } else if (contentType === 'serie') {
-        // Buscar o IMDb ID correspondente ao TMDB ID para séries
-        const series = seriesData.find((s: any) => s.tmdbID === contentId)
-        if (series) {
-          setImdbId(series.imdbID)
+        if (USE_IMDB_FOR_SERIES) {
+          // Buscar o IMDb ID correspondente ao TMDB ID para séries
+          const series = seriesData.find((s: any) => s.tmdbID === contentId)
+          if (series) {
+            setImdbId(series.imdbID)
+          }
         } else {
-          // Se não houver IMDb ID, usa TMDB ID diretamente
-          setImdbId(null)
+          // Usar TMDB ID diretamente para séries
+          setImdbId(contentId)
         }
       }
     }
@@ -63,11 +76,19 @@ export const ModalPlay: FC<ContentModalProps> = ({
       ? `https://superflixapi.dev/${contentType}/${imdbId}${
           season ? `/${season}` : ''
         }${episode ? `/${episode}` : ''}`
-      : contentType === 'serie'
-        ? `https://superflixapi.dev/${contentType}/${contentId}${
+      : contentType === 'serie' && imdbId
+        ? `https://superflixapi.dev/${contentType}/${imdbId}${
             season ? `/${season}` : ''
           }${episode ? `/${episode}` : ''}`
-        : ''
+        : contentType === 'filme'
+          ? `https://superflixapi.dev/${contentType}/${contentId}${
+              season ? `/${season}` : ''
+            }${episode ? `/${episode}` : ''}`
+          : contentType === 'serie'
+            ? `https://superflixapi.dev/${contentType}/${contentId}${
+                season ? `/${season}` : ''
+              }${episode ? `/${episode}` : ''}`
+            : ''
 
   useEffect(() => {
     if (open) {
