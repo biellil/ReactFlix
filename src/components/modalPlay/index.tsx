@@ -1,11 +1,12 @@
-// src/components/ModalPlay/ModalPlay.tsx
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { Modal, Box, Typography, Button } from '@mui/material'
 import { modalStyle } from './styles'
 import { StyledLinearProgress } from '../Loading/styles'
 import { Loading } from '../Loading'
+import moviesData from './movies.json'
+import seriesData from './series.json'
 
-// Definição da função clearCache
+// Função para limpar o cache
 const clearCache = () => {
   Object.keys(localStorage).forEach((key) => {
     if (
@@ -34,14 +35,40 @@ export const ModalPlay: FC<ContentModalProps> = ({
   season,
   episode,
 }) => {
-  // Cria a URL do iframe com base nas propriedades
-  const iframeSrc = contentId
-    ? `https://superflixapi.dev/${contentType}/${contentId}${
-        season ? `/${season}` : ''
-      }${episode ? `/${episode}` : ''}`
-    : ''
+  const [imdbId, setImdbId] = useState<string | null>(null)
 
-  // useEffect para limpar o cache quando o modal abrir
+  useEffect(() => {
+    if (contentId) {
+      if (contentType === 'filme') {
+        // Buscar o IMDb ID correspondente ao TMDB ID para filmes
+        const movie = moviesData.find((m: any) => m.tmdbID === contentId)
+        if (movie) {
+          setImdbId(movie.imdbID)
+        }
+      } else if (contentType === 'serie') {
+        // Buscar o IMDb ID correspondente ao TMDB ID para séries
+        const series = seriesData.find((s: any) => s.tmdbID === contentId)
+        if (series) {
+          setImdbId(series.imdbID)
+        } else {
+          // Se não houver IMDb ID, usa TMDB ID diretamente
+          setImdbId(null)
+        }
+      }
+    }
+  }, [contentId, contentType])
+
+  const iframeSrc =
+    contentType === 'filme' && imdbId
+      ? `https://superflixapi.dev/${contentType}/${imdbId}${
+          season ? `/${season}` : ''
+        }${episode ? `/${episode}` : ''}`
+      : contentType === 'serie'
+        ? `https://superflixapi.dev/${contentType}/${contentId}${
+            season ? `/${season}` : ''
+          }${episode ? `/${episode}` : ''}`
+        : ''
+
   useEffect(() => {
     if (open) {
       clearCache()
