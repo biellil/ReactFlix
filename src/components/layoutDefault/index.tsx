@@ -4,10 +4,9 @@ import { LayoutContainer } from './styles'
 import { Header } from '../Header'
 import { Loading } from '../Loading'
 import { AdSenseAd } from '../AdSenseAd'
+import { SearchInput } from '../SearchInput' // Importa o novo componente
 
-// Importação dos componentes usando lazy
 const Topfilmes = lazy(() => import('../../pages/Topfilmes'))
-// const Category = lazy(() => import('../../pages/category'))
 const TopSeries = lazy(() => import('../../pages/TopSeries'))
 const SearchComponent = lazy(() => import('../../pages/Search'))
 
@@ -17,22 +16,32 @@ export default function DefaultLayout() {
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category)
+    setSearchTerm('')
   }
 
-  const handleSearchChange = (searchTerm: string) => {
-    setSearchTerm(searchTerm)
-    // Muda a categoria para 'Search' quando o termo de pesquisa é alterado
-    setSelectedCategory('Search')
+  const handleSearchChange = (term: string) => {
+    setSearchTerm(term)
+    if (term.trim() !== '') {
+      setSelectedCategory('Search')
+    }
   }
 
   const renderContent = () => {
     switch (selectedCategory) {
       case 'Filmes':
-        return <Topfilmes />
+        return (
+          <Topfilmes
+            searchTerm={searchTerm}
+            onSearchChange={handleSearchChange}
+          />
+        )
       case 'Series':
-        return <TopSeries />
-      // case 'category':
-      //   return <Category />
+        return (
+          <TopSeries
+            searchTerm={searchTerm}
+            onSearchChange={handleSearchChange}
+          />
+        )
       case 'Search':
         return <SearchComponent searchTerm={searchTerm} />
       default:
@@ -43,14 +52,14 @@ export default function DefaultLayout() {
   return (
     <>
       <LayoutContainer className="container">
-        <Header
-          onCategoryChange={handleCategoryChange}
+        <Header onCategoryChange={handleCategoryChange} />
+        <SearchInput
+          searchTerm={searchTerm}
           onSearchChange={handleSearchChange}
         />
         <Suspense fallback={<Loading />}>{renderContent()}</Suspense>
       </LayoutContainer>
       <AdSenseAd />
-      {/* <VerticalAd /> */}
     </>
   )
 }
