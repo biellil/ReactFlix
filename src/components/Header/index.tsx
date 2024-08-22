@@ -2,7 +2,12 @@ import React, { useState } from 'react'
 import { FilmReel, FilmScript } from '@phosphor-icons/react'
 import { Category, Headers } from './styles'
 import icon from '../../assets/icon.png'
-import { IconButton, InputAdornment, OutlinedInput } from '@mui/material'
+import {
+  IconButton,
+  InputAdornment,
+  OutlinedInput,
+  // Typography,
+} from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 
 interface HeaderProps {
@@ -71,6 +76,9 @@ export function Header({ onCategoryChange, onSearchChange }: HeaderProps) {
           }
         />
       </label>
+      {/* <Typography variant="body1" component="h5">
+        Sair
+      </Typography> */}
     </Headers>
   )
 }
