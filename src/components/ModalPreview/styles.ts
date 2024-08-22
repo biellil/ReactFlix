@@ -66,7 +66,7 @@ height: auto;
     display: flex;
     justify-content: space-evenly;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.1rem;
    height: 69vh;
     button {
       gap: 0.5rem;
@@ -83,12 +83,16 @@ height: auto;
   h5 {
 @media screen and (min-width: 1920px) {
       font-size: 0.8rem;
+text-overflow: ellipsis;
+  word-wrap: break-word;
     }
   }
 
   h6 {
-    @media (max-width: 999px) {
+@media screen and (min-width: 1920px) {
       font-size: 0.8rem;
+text-overflow: ellipsis;
+  word-wrap: break-word;
     }
   }
 `
