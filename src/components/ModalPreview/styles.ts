@@ -71,6 +71,7 @@ export const CardStyle = styled(Card)`
     }
     @media (max-width: 999px) {
       margin-top: 1rem;
+    justify-content: center;
     }
     @media (max-width: 768px) {
       margin-top: 5rem;
