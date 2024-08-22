@@ -56,7 +56,7 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
           <CardMedia
             component="img"
             alt={title}
-            height="300vh"
+            
             image={`https://image.tmdb.org/t/p/w500${posterPath}`}
           />
 
