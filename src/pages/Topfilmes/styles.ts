@@ -1,43 +1,44 @@
 import styled from 'styled-components'
 
 export const TopContainer = styled.section`
-  @media (max-width: 999px) {
+  width: 89vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  @media screen and (min-width: 1920px) {
     max-width: 89vw;
     padding: 1rem;
   }
-  padding: 1rem;
-  nav {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 2rem;
-  }
+
   @media (max-width: 768px) {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column-reverse;
+    flex-direction: column;
     gap: 0.5rem;
   }
 `
-export const MoviesGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(10vw, 1fr));
-  gap: 1.5rem;
-  align-items: center;
 
+export const MoviesGrid = styled.div`
+  width: 75vw;
+  display: grid;
+  margin: 2rem 0;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
   padding: 0.5rem;
-  @media (max-width: 999px) {
-    grid-template-columns: repeat(auto-fill, minmax(16vw, 1fr));
+
+  @media screen and (min-width: 1920px) {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 0.5rem;
   }
 
   @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 0fr);
-    grid-template-rows: repeat(4, 100px);
-    gap: 1rem;
-    align-items: center;
-    justify-content: center;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.5rem;
   }
 `
 
@@ -52,14 +53,17 @@ export const MovieCard = styled.div`
   display: flex;
   align-items: end;
   justify-content: center;
-  @media (max-width: 999px) {
+
+  @media screen and (min-width: 1920px) {
     width: 10rem;
   }
+
   &:hover {
     border: 1px solid red;
     transform: scale(1.05);
     color: red;
   }
+
   @media (max-width: 768px) {
     width: 9rem;
     height: 5rem;
@@ -82,6 +86,7 @@ export const MovieTitle = styled.h3`
   width: 12rem;
   text-overflow: ellipsis;
   word-wrap: break-word;
+
   @media (max-width: 768px) {
     width: 9rem;
   }

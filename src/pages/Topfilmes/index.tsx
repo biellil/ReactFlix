@@ -1,12 +1,7 @@
+// Topfilmes.tsx
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Pagination, Alert, Snackbar, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
-import {
-  keepPreviousData,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query'
 import {
   TopContainer,
   MoviesGrid,
@@ -15,6 +10,11 @@ import {
   MovieTitle,
 } from './styles'
 import { ModalPreview } from '../../components/ModalPreview'
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query'
 
 interface Movie {
   adult: boolean
@@ -40,10 +40,18 @@ interface ApiResponse {
   total_results: number
 }
 
+interface TopfilmesProps {
+  searchTerm: string
+  onSearchChange: (searchTerm: string) => void
+}
+
 const PRELOAD_PAGES = import.meta.env.VITE_PRELOAD_PAGES || 3
 const MAX_PAGES_DISPLAYED = 500
 
-export default function Topfilmes() {
+export default function Topfilmes({
+  searchTerm,
+  onSearchChange,
+}: TopfilmesProps) {
   const [page, setPage] = useState(1)
   const [openSnackbar, setOpenSnackbar] = useState(false)
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768)
@@ -51,11 +59,10 @@ export default function Topfilmes() {
 
   const apiUrl = import.meta.env.VITE_API_URL
   const queryClient = useQueryClient()
-  const navigate = useNavigate()
 
   const fetchMovies = async (page: number): Promise<ApiResponse> => {
     const response = await fetch(
-      `${apiUrl}/movie/popular?language=pt-BR&page=${page}`,
+      `${apiUrl}/movie/popular?language=pt-BR&page=${page}&query=${searchTerm}`,
       {
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
@@ -70,7 +77,7 @@ export default function Topfilmes() {
   }
 
   const { data, isError, error } = useQuery<ApiResponse, Error>({
-    queryKey: ['Topfilmes', page],
+    queryKey: ['Topfilmes', page, searchTerm],
     queryFn: () => fetchMovies(page),
     placeholderData: keepPreviousData,
     onSuccess: (data: { total_pages: number }) => {
@@ -78,7 +85,7 @@ export default function Topfilmes() {
         const nextPage = page + i
         if (nextPage <= data.total_pages && nextPage <= MAX_PAGES_DISPLAYED) {
           queryClient.prefetchQuery({
-            queryKey: ['Topfilmes', nextPage],
+            queryKey: ['Topfilmes', nextPage, searchTerm],
             queryFn: () => fetchMovies(nextPage),
           })
         }
@@ -116,24 +123,16 @@ export default function Topfilmes() {
 
   return (
     <TopContainer>
-      <Pagination
-        count={data ? Math.min(data.total_pages, MAX_PAGES_DISPLAYED) : 1}
-        page={page}
-        onChange={handlePageChange}
-        variant="outlined"
-      />
       <MoviesGrid>
-        {data?.results
-          .slice(0, isSmallScreen ? 8 : data.results.length)
-          .map((movie) => (
-            <MovieCard key={movie.id} onClick={() => handleOpenModal(movie)}>
-              <MovieBanner
-                src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
-                alt={movie.title}
-              />
-              <MovieTitle>{movie.title}</MovieTitle>
-            </MovieCard>
-          ))}
+        {data?.results.map((movie) => (
+          <MovieCard key={movie.id} onClick={() => handleOpenModal(movie)}>
+            <MovieBanner
+              src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
+              alt={movie.title}
+            />
+            <MovieTitle>{movie.title}</MovieTitle>
+          </MovieCard>
+        ))}
       </MoviesGrid>
       <Snackbar
         open={isError && openSnackbar}
@@ -173,6 +172,12 @@ export default function Topfilmes() {
           release_date={selectedMovie.release_date}
         />
       )}
+      <Pagination
+        count={data ? Math.min(data.total_pages, MAX_PAGES_DISPLAYED) : 1}
+        page={page}
+        onChange={handlePageChange}
+        variant="outlined"
+      />
     </TopContainer>
   )
 }

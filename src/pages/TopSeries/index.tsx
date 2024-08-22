@@ -1,3 +1,4 @@
+// TopSeries.tsx
 import React, { useState, useEffect } from 'react'
 import { Pagination, Alert, Snackbar, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
@@ -42,7 +43,15 @@ interface ApiResponse {
 const PRELOAD_PAGES = import.meta.env.VITE_PRELOAD_PAGES || 3
 const MAX_PAGES_DISPLAYED = 500
 
-export default function TopSeries() {
+interface TopSeriesProps {
+  searchTerm: string
+  onSearchChange: (searchTerm: string) => void
+}
+
+export default function TopSeries({
+  searchTerm,
+  onSearchChange,
+}: TopSeriesProps) {
   const [page, setPage] = useState(1)
   const [openSnackbar, setOpenSnackbar] = useState(false)
   const [selectedSeries, setSelectedSeries] = useState<Series | null>(null)
@@ -53,7 +62,7 @@ export default function TopSeries() {
 
   const fetchSeries = async (page: number): Promise<ApiResponse> => {
     const response = await fetch(
-      `${apiUrl}/tv/popular?language=pt-BR&page=${page}`,
+      `${apiUrl}/tv/popular?language=pt-BR&page=${page}&query=${searchTerm}`,
       {
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
@@ -68,15 +77,15 @@ export default function TopSeries() {
   }
 
   const { data, isError, error } = useQuery<ApiResponse, Error>({
-    queryKey: ['TopSeries', page],
+    queryKey: ['TopSeries', page, searchTerm],
     queryFn: () => fetchSeries(page),
     placeholderData: keepPreviousData,
-    onSuccess: (data) => {
+    onSuccess: (data: { total_pages: number }) => {
       for (let i = 1; i <= PRELOAD_PAGES; i++) {
         const nextPage = page + i
         if (nextPage <= data.total_pages && nextPage <= MAX_PAGES_DISPLAYED) {
           queryClient.prefetchQuery({
-            queryKey: ['TopSeries', nextPage],
+            queryKey: ['TopSeries', nextPage, searchTerm],
             queryFn: () => fetchSeries(nextPage),
           })
         }
@@ -115,17 +124,15 @@ export default function TopSeries() {
   return (
     <HomeContainer>
       <MoviesGrid>
-        {data?.results
-          .slice(0, isSmallScreen ? 8 : data.results.length)
-          .map((series) => (
-            <MovieCard key={series.id} onClick={() => handleOpenModal(series)}>
-              <MovieBanner
-                src={`https://image.tmdb.org/t/p/w500${series.backdrop_path}`}
-                alt={series.name}
-              />
-              <MovieTitle>{series.name}</MovieTitle>
-            </MovieCard>
-          ))}
+        {data?.results.map((series) => (
+          <MovieCard key={series.id} onClick={() => handleOpenModal(series)}>
+            <MovieBanner
+              src={`https://image.tmdb.org/t/p/w500${series.backdrop_path}`}
+              alt={series.name}
+            />
+            <MovieTitle>{series.name}</MovieTitle>
+          </MovieCard>
+        ))}
       </MoviesGrid>
       <Snackbar
         open={isError && openSnackbar}
