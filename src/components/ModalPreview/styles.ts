@@ -52,10 +52,9 @@ export const CardStyle = styled(Card)`
       height: 75vh;
       width: 35vw;
     }
-    @media (max-width: 999px) {
-     height: 85vh;
+@media screen and (min-width: 1920px) {
+height: 82vh;
       width: 30vw;
-    }
   }
 
   svg {
