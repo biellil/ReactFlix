@@ -81,7 +81,7 @@ export const CardStyle = styled(Card)`
     }
 
     @media (max-width: 768px) {
-      margin-top: 5rem;
+      margin-top: 4rem;
     }
   }
 
@@ -98,8 +98,9 @@ export const CardStyle = styled(Card)`
 export const CardContent = styled(Card)`
   display: flex;
   flex-direction: column;
-  padding: 2rem;
+  padding: 1.5rem;
   gap: 1rem;
+  height: 75vh;
 `
 
 export const RatingDiv = styled(Box)`
