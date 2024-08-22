@@ -65,7 +65,8 @@ export const CardStyle = styled(Card)`
     display: flex;
     justify-content: space-evenly;
     flex-direction: column;
-    gap: 1.1rem;
+    gap: 1rem;
+   height: 69vh;
     button {
       gap: 0.5rem;
     }
