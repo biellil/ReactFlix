@@ -43,7 +43,7 @@ export const CardStyle = styled(Card)`
   width: 35vw;
   display: flex;
   img {
-    height: 80vh;
+    height: auto;
     width: 35vw;
     display: flex;
     align-items: center;
@@ -53,7 +53,7 @@ export const CardStyle = styled(Card)`
       width: 35vw;
     }
 @media screen and (min-width: 1920px) {
-height: 82vh;
+height: 65vh;
       width: 30vw;
   }
 
