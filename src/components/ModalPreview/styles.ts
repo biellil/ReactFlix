@@ -69,7 +69,7 @@ export const CardStyle = styled(Card)`
     justify-content: space-evenly;
     flex-direction: column;
     gap: 1.1rem;
-    height: 69vh;
+    height: 70vh;
 
     button {
       gap: 0.5rem;
@@ -100,7 +100,7 @@ export const CardContent = styled(Card)`
   flex-direction: column;
   padding: 1.5rem;
   gap: 1rem;
-  height: 75vh;
+  height: auto;
 `
 
 export const RatingDiv = styled(Box)`
