@@ -6,7 +6,7 @@ export const ModalStyle = styled(Box)`
   top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: ${({ theme }) => theme.palette.background.paper};
+  /* background: ${({ theme }) => theme.palette.background.paper}; */
   box-shadow: 24px;
   padding: 2rem;
 
@@ -80,7 +80,7 @@ export const CardStyle = styled(Card)`
       justify-content: center;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 868px) {
       margin-top: 4rem;
     }
   }
