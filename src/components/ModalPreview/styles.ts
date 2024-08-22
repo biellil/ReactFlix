@@ -61,6 +61,7 @@ height: 65vh;
   }
 
   .divplay {
+height: auto;
     margin-top: 9rem;
     display: flex;
     justify-content: space-evenly;
@@ -70,7 +71,8 @@ height: 65vh;
     button {
       gap: 0.5rem;
     }
-    @media (max-width: 999px) {
+    
+@media screen and (min-width: 1920px) {
       margin-top: 1rem;
     justify-content: center;
     }
@@ -79,7 +81,7 @@ height: 65vh;
     }
   }
   h5 {
-    @media (max-width: 999px) {
+@media screen and (min-width: 1920px) {
       font-size: 0.8rem;
     }
   }
