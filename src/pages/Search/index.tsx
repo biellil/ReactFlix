@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Pagination, Alert, Snackbar, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
-import {
-  keepPreviousData,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   SearchContainer,
   ResultsGrid,
@@ -16,15 +12,59 @@ import {
 import { ModalPlay } from '../../components/modalPlay'
 
 interface Result {
+  backdrop_path?: string
   id: number
+  name?: string
+  original_name?: string
+  overview?: string
+  poster_path?: string
+  media_type: string
+  adult: boolean
+  original_language?: string
+  genre_ids?: number[]
+  popularity: number
+  first_air_date?: string
+  vote_average?: number
+  vote_count?: number
+  origin_country?: string[]
+  title?: string
+  original_title?: string
+  release_date?: string
+  video?: boolean
+  gender?: number
+  known_for_department?: string
+  profile_path?: string
+  // eslint-disable-next-line no-use-before-define
+  known_for?: KnownFor[]
+}
+
+ interface KnownFor {
   backdrop_path: string
-  title: string
-  name: string
+  id: number
+  title?: string
+  original_title?: string
+  overview: string
+  poster_path: string
+  media_type: string
+  adult: boolean
+  original_language: string
+  genre_ids: number[]
+  popularity: number
+  release_date?: string
+  video?: boolean
+  vote_average: number
+  vote_count: number
+  name?: string
+  original_name?: string
+  first_air_date?: string
+  origin_country?: string[]
 }
 
 interface ApiResponse {
+  page: number
   results: Result[]
   total_pages: number
+  total_results: number
 }
 
 const PRELOAD_PAGES = import.meta.env.VITE_PRELOAD_PAGES || 3
@@ -40,7 +80,7 @@ export default function SearchComponent({ searchTerm }: SearchComponentProps) {
   const [page, setPage] = useState(1)
   const [openSnackbar, setOpenSnackbar] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
-  const [selectedResultId, setSelectedResultId] = useState<number | null>(null)
+  const [selectedResult, setSelectedResult] = useState<Result | null>(null)
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768)
 
   const queryClient = useQueryClient()
@@ -64,18 +104,19 @@ export default function SearchComponent({ searchTerm }: SearchComponentProps) {
   const { data, isError, error } = useQuery<ApiResponse, Error>({
     queryKey: ['SearchResults', searchTerm, page],
     queryFn: () => fetchResults(page),
-    placeholderData: keepPreviousData,
-    onSuccess: (data: { total_pages: number }) => {
+    keepPreviousData: true, // Corrigido
+    onSuccess: (data) => {
       for (let i = 1; i <= PRELOAD_PAGES; i++) {
         const nextPage = page + i
         if (nextPage <= data.total_pages && nextPage <= MAX_PAGES_DISPLAYED) {
-          queryClient.prefetchQuery({
-            queryKey: ['SearchResults', searchTerm, nextPage],
-            queryFn: () => fetchResults(nextPage),
-          })
+          queryClient.prefetchQuery(
+            ['SearchResults', searchTerm, nextPage],
+            () => fetchResults(nextPage),
+          )
         }
       }
     },
+    onError: () => setOpenSnackbar(true), // Abre o Snackbar ao ocorrer erro
   })
 
   useEffect(() => {
@@ -98,14 +139,14 @@ export default function SearchComponent({ searchTerm }: SearchComponentProps) {
     setOpenSnackbar(false)
   }
 
-  const handleOpenModal = (id: number) => {
-    setSelectedResultId(id)
+  const handleOpenModal = (result: Result) => {
+    setSelectedResult(result)
     setModalOpen(true)
   }
 
   const handleCloseModal = () => {
     setModalOpen(false)
-    setSelectedResultId(null)
+    setSelectedResult(null)
   }
 
   return (
@@ -118,12 +159,9 @@ export default function SearchComponent({ searchTerm }: SearchComponentProps) {
       />
       <ResultsGrid>
         {data?.results
-          .slice(0, isSmallScreen ? 8 : data.results.length)
+          .slice(0, isSmallScreen ? 8 : data.results.length) // Corrigido para limitar resultados no mobile
           .map((result) => (
-            <ResultCard
-              key={result.id}
-              onClick={() => handleOpenModal(result.id)}
-            >
+            <ResultCard key={result.id} onClick={() => handleOpenModal(result)}>
               <ResultBanner
                 src={`https://image.tmdb.org/t/p/w500${result.backdrop_path}`}
                 alt={result.title || result.name}
@@ -147,20 +185,12 @@ export default function SearchComponent({ searchTerm }: SearchComponentProps) {
             <CloseIcon />
           </IconButton>
         }
-      >
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity="error"
-          sx={{ width: '100%' }}
-        >
-          {error?.message}
-        </Alert>
-      </Snackbar>
+      />
       <ModalPlay
         open={modalOpen}
         onClose={handleCloseModal}
-        contentId={selectedResultId?.toString() || ''}
-        contentType="filme"
+        contentId={selectedResult?.id.toString() || ''}
+        contentType={selectedResult?.media_type || ''}
       />
     </SearchContainer>
   )

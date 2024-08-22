@@ -1,4 +1,4 @@
-//styles.ts
+// styles.ts
 import { Box, styled, Card } from '@mui/material'
 
 export const ModalStyle = styled(Box)`
@@ -6,12 +6,12 @@ export const ModalStyle = styled(Box)`
   top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: 'background.paper';
+  background: ${({ theme }) => theme.palette.background.paper};
   box-shadow: 24px;
   padding: 2rem;
 
   > div {
-    background: 'background.paper';
+    background: ${({ theme }) => theme.palette.background.paper};
     height: 75vh;
     width: 90vw;
     max-width: 75rem;
@@ -23,11 +23,12 @@ export const ModalStyle = styled(Box)`
     gap: 0.5rem;
   }
 
-  @media screen and (min-width: 1920px) {
+  @media screen and (min-width: 1920px) {
     > div {
       height: 65vh;
     }
   }
+
   @media (max-width: 768px) {
     top: 50%;
     left: 50%;
@@ -38,72 +39,69 @@ export const ModalStyle = styled(Box)`
     }
   }
 `
+
 export const CardStyle = styled(Card)`
   height: 70vh;
   width: 35vw;
   display: flex;
+
   img {
     height: auto;
     width: 35vw;
     display: flex;
     align-items: center;
     justify-content: center;
+
     @media (max-width: 768px) {
       height: 75vh;
       width: 35vw;
     }
-@media screen and (min-width: 1920px) {
-height: 65vh;
-      width: 30vw;
-  }
 
-  svg {
+    @media screen and (min-width: 1920px) {
+      height: 65vh;
+      width: 35vw;
+    }
   }
 
   .divplay {
-height: auto;
-max-height:69
     margin-top: 9rem;
     display: flex;
     justify-content: space-evenly;
     flex-direction: column;
     gap: 1.1rem;
-   height: 69vh;
+    height: 69vh;
+
     button {
       gap: 0.5rem;
     }
-    
-@media screen and (min-width: 1920px) {
+
+    @media screen and (min-width: 1920px) {
       margin-top: 1rem;
-    justify-content: center;
+      justify-content: center;
     }
+
     @media (max-width: 768px) {
       margin-top: 5rem;
     }
   }
-  h5 {
-@media screen and (min-width: 1920px) {
-      font-size: 0.7rem;
-text-overflow: ellipsis;
-  word-wrap: break-word;
-    }
-  }
 
+  h5,
   h6 {
-@media screen and (min-width: 1920px) {
+    @media screen and (min-width: 1920px) {
       font-size: 0.7rem;
-text-overflow: ellipsis;
-  word-wrap: break-word;
+      text-overflow: ellipsis;
+      word-wrap: break-word;
     }
   }
 `
+
 export const CardContent = styled(Card)`
   display: flex;
   flex-direction: column;
   padding: 2rem;
   gap: 1rem;
 `
+
 export const RatingDiv = styled(Box)`
-  /* display: flex;
-  justify-content: space-evenly; */
+  /* Aqui, você pode adicionar estilos adicionais se necessário */
 `

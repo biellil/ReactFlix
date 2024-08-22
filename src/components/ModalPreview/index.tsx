@@ -1,6 +1,6 @@
 import { FC, useState } from 'react'
 import { Modal, Typography, Button, CardMedia, Rating } from '@mui/material'
-import { CardStyle, ModalStyle, CardContent, RatingDiv } from './styles'
+import { CardStyle, ModalStyle, CardContent } from './styles'
 import { Play } from '@phosphor-icons/react'
 import { ModalPlay } from '../modalPlay'
 
@@ -8,7 +8,7 @@ interface ContentPreviewProps {
   open: boolean
   onClose: () => void
   contentId: string | null
-  contentType: 'filme' | 'serie'
+  contentType: 'filme' | 'serie' | 'movie' | 'tv'
   title: string
   overview: string
   posterPath: string
@@ -65,12 +65,11 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
               {title}
             </Typography>
 
-
-            <Typography variant="body3" component="h5">
+            <Typography variant="body2" component="h5">
               SINOPSE
             </Typography>
 
-            <Typography variant="body3" color="text.secondary">
+            <Typography variant="subtitle1" color="text.secondary">
               {overview}
             </Typography>
             <Typography variant="body2" color="text.secondary">
@@ -106,6 +105,7 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
           onClose={handleCloseModalPlay}
           contentId={contentId}
           contentType={contentType}
+          title={title}
         />
       </ModalStyle>
     </Modal>

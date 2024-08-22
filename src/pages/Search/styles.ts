@@ -1,59 +1,79 @@
 import styled from 'styled-components'
 
 export const SearchContainer = styled.div`
+  width: 89vw;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
-  max-width: 62.1vw;
-  @media (max-width: 999px) {
+
+  label {
+    margin-left: 59rem;
+    @media (max-width: 1024px) {
+      display: none;
+      gap: 0.5rem;
+      width: 19vw;
+    }
+  }
+
+  @media screen and (min-width: 1920px) {
     max-width: 89vw;
     padding: 1rem;
   }
-  padding: 1rem;
-  nav {
+
+  @media (max-width: 768px) {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    margin-bottom: 2rem;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 `
 
 export const ResultsGrid = styled.div`
+  width: 75vw;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(10vw, 1fr));
-  gap: 1.5rem;
-
+  margin: 2rem 0;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
   padding: 0.5rem;
-  @media (max-width: 999px) {
-    grid-template-columns: repeat(auto-fill, minmax(16vw, 1fr));
+
+  @media screen and (min-width: 1920px) {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 0.5rem;
   }
 
   @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 0fr);
-    grid-template-rows: repeat(4, 100px);
-    gap: 1rem;
-    align-items: center;
-    justify-content: center;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.5rem;
   }
 `
 
 export const ResultCard = styled.div`
+  cursor: pointer;
   border: 1px solid #ccc;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
-  width: 12rem;
+  width: 11vw;
   display: flex;
   align-items: end;
   justify-content: center;
-  @media (max-width: 999px) {
+
+  @media screen and (min-width: 1920px) {
     width: 10rem;
   }
+
   &:hover {
     border: 1px solid red;
     transform: scale(1.05);
     color: red;
   }
+
   @media (max-width: 768px) {
     width: 9rem;
     height: 5rem;
