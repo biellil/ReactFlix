@@ -101,7 +101,7 @@ export const ModalPlay: FC<ContentModalProps> = ({
             title="Video"
             allowFullScreen
             allow="autoplay; fullscreen"
-            loading="lazy"
+            //loading="lazy"
             sandbox="allow-same-origin allow-scripts"
           />
         ) : (
