@@ -53,6 +53,7 @@ export const CardStyle = styled(Card)`
       width: 35vw;
     }
     @media (max-width: 999px) {
+     height: 75vh;
       width: 30vw;
     }
   }
