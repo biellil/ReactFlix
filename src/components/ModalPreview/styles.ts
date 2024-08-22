@@ -1,4 +1,4 @@
-// src/components/ModalPlay/styles.ts
+//styles.ts
 import { Box, styled, Card } from '@mui/material'
 
 export const ModalStyle = styled(Box)`
@@ -23,7 +23,7 @@ export const ModalStyle = styled(Box)`
     gap: 0.5rem;
   }
 
-  @media (max-width: 999px) {
+  @media screen and (min-width: 1920px) {
     > div {
       height: 65vh;
     }
@@ -62,6 +62,7 @@ height: 65vh;
 
   .divplay {
 height: auto;
+max-height:69
     margin-top: 9rem;
     display: flex;
     justify-content: space-evenly;
@@ -82,7 +83,7 @@ height: auto;
   }
   h5 {
 @media screen and (min-width: 1920px) {
-      font-size: 0.8rem;
+      font-size: 0.7rem;
 text-overflow: ellipsis;
   word-wrap: break-word;
     }
@@ -90,7 +91,7 @@ text-overflow: ellipsis;
 
   h6 {
 @media screen and (min-width: 1920px) {
-      font-size: 0.8rem;
+      font-size: 0.7rem;
 text-overflow: ellipsis;
   word-wrap: break-word;
     }
