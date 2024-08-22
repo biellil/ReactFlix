@@ -52,7 +52,11 @@ export default function DefaultLayout() {
   return (
     <>
       <LayoutContainer className="container">
-        <Header onCategoryChange={handleCategoryChange} />
+        <Header
+          onCategoryChange={handleCategoryChange}
+          onSearchChange={handleSearchChange}
+          searchTerm={searchTerm}
+        />
         <SearchInput
           searchTerm={searchTerm}
           onSearchChange={handleSearchChange}

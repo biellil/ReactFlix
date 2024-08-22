@@ -8,6 +8,7 @@ export const LabelContainer = styled.label`
     border-radius: 25px;
   }
   @media (max-width: 1024px) {
+    position: static;
     display: none;
     gap: 0.5rem;
     width: 19vw;
