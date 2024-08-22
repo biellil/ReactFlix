@@ -99,8 +99,6 @@ export const ModalPlay: FC<ContentModalProps> = ({
             src={iframeSrc}
             style={{ width: '100%', height: '90%', border: 'none' }}
             title="Video"
-            allowFullScreen
-            allow="autoplay; fullscreen"
             //loading="lazy"
             sandbox="allow-same-origin allow-scripts"
           />
