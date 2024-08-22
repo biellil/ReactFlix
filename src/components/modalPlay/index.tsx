@@ -105,6 +105,8 @@ export const ModalPlay: FC<ContentModalProps> = ({
             style={{ width: '100%', height: '90%', border: 'none' }}
             title={title}
             loading="lazy"
+            allowFullScreen
+            allow="autoplay; fullscreen"
             sandbox="allow-same-origin allow-scripts"
           />
         ) : (
