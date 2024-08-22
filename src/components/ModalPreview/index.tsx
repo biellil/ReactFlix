@@ -69,9 +69,9 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
               SINOPSE
             </Typography>
 
-            <Typography variant="subtitle1" color="text.secondary">
+            {/* <Typography variant="subtitle1" color="text.secondary">
               {overview}
-            </Typography>
+            </Typography> */}
             <Typography variant="body2" color="text.secondary">
               Data de lançamento: {formatDate(release_date)}
             </Typography>
