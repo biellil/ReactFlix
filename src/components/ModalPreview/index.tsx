@@ -1,20 +1,21 @@
-import { FC, useState, useEffect } from 'react';
-import { Modal, Typography, Button, CardMedia, Rating } from '@mui/material';
-import { CardStyle, ModalStyle, CardContent } from './styles';
-import { Play } from '@phosphor-icons/react';
-import { ModalPlay } from '../modalPlay';
+ 
+import { FC, useState } from 'react'
+import { Modal, Typography, Button, CardMedia, Rating } from '@mui/material'
+import { CardStyle, ModalStyle, CardContent } from './styles'
+import { Play } from '@phosphor-icons/react'
+import { ModalPlay } from '../modalPlay'
 
 interface ContentPreviewProps {
-  open: boolean;
-  onClose: () => void;
-  contentId: string | null;
-  contentType: 'filme' | 'serie' | 'movie' | 'tv';
-  title: string;
-  overview: string;
-  posterPath: string;
-  vote_average: number;
-  release_date: string;
-  type: string;
+  open: boolean
+  onClose: () => void
+  contentId: string | null
+  contentType: 'filme' | 'serie' | 'movie' | 'tv'
+  title: string
+  overview: string
+  posterPath: string
+  vote_average: number
+  release_date: string
+  type: string
 }
 
 export const ModalPreview: FC<ContentPreviewProps> = ({
@@ -29,33 +30,26 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
   release_date,
   type,
 }) => {
-  const [modalPlayOpen, setModalPlayOpen] = useState(false);
-  const [shouldClosePreview, setShouldClosePreview] = useState(false);
+  const [modalPlayOpen, setModalPlayOpen] = useState(false)
 
   const handleOpenModalPlay = () => {
-    setModalPlayOpen(true);
-    setShouldClosePreview(true);
-  };
-
-  useEffect(() => {
-    if (shouldClosePreview && modalPlayOpen) {
-      onClose();  // Fecha o ModalPreview somente depois de abrir o ModalPlay
-    }
-  }, [modalPlayOpen, shouldClosePreview, onClose]);
+    onClose();  // Fecha o modal de preview
+    setModalPlayOpen(true);  // Abre o modal de play
+  }
 
   const handleCloseModalPlay = () => {
-    setModalPlayOpen(false);
-  };
+    setModalPlayOpen(false)
+  }
 
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
-    };
-    const date = new Date(dateString);
-    return date.toLocaleDateString('pt-BR', options);
-  };
+    }
+    const date = new Date(dateString)
+    return date.toLocaleDateString('pt-BR', options)
+  }
 
   return (
     <Modal open={open} onClose={onClose} aria-labelledby={title}>
@@ -113,5 +107,5 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
         />
       </ModalStyle>
     </Modal>
-  );
-};
+  )
+}
