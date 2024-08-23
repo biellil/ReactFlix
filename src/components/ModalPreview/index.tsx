@@ -32,8 +32,8 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
   const [modalPlayOpen, setModalPlayOpen] = useState(false)
 
   const handleOpenModalPlay = () => {
-    setModalPlayOpen(true)
-    onClose() // Fechar o ModalPreview ao abrir o ModalPlay
+    onClose();  // Fecha o modal de preview
+    setModalPlayOpen(true);  // Abre o modal de play
   }
 
   const handleCloseModalPlay = () => {
