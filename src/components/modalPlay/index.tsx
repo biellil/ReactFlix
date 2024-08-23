@@ -78,25 +78,20 @@ export const ModalPlay: FC<ContentModalProps> = ({
       ? `https://superflixapi.dev/serie/${contentId}${season ? `/${season}` : ''}${episode ? `/${episode}` : ''}`
       : ''
 
-  // Limpar o cache quando o modal for aberto
-  useEffect(() => {
-    if (open) {
-      clearCache()
-    }
-  }, [open])
+  // // Limpar o cache quando o modal for aberto
+  // useEffect(() => {
+  //   if (open) {
+  //     clearCache()
+  //   }
+  // }, [open])
 
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      aria-labelledby={title}
-      aria-describedby="modal-description"
-    >
+    <Modal open={open} onClose={onClose} aria-labelledby={title}>
       <Box sx={modalStyle} className="modalStyle">
         {iframeSrcForMovies ? (
           <iframe
             src={iframeSrcForMovies}
-            style={{ width: '100%', height: '90%', border: 'none' }}
+            style={{ width: '100%', height: '90%', border: '0', padding: '0' }}
             title={title}
             loading="lazy"
             allowFullScreen
@@ -106,7 +101,7 @@ export const ModalPlay: FC<ContentModalProps> = ({
         ) : iframeSrcForSeries ? (
           <iframe
             src={iframeSrcForSeries}
-            style={{ width: '100%', height: '90%', border: 'none' }}
+            style={{ width: '100%', height: '90%', border: '0', padding: '0' }}
             title={title}
             loading="lazy"
             allowFullScreen
