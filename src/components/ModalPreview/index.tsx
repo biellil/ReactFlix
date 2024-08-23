@@ -1,3 +1,4 @@
+ 
 import { FC, useState } from 'react'
 import { Modal, Typography, Button, CardMedia, Rating } from '@mui/material'
 import { CardStyle, ModalStyle, CardContent } from './styles'
@@ -32,7 +33,8 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
   const [modalPlayOpen, setModalPlayOpen] = useState(false)
 
   const handleOpenModalPlay = () => {
-    setModalPlayOpen(true)
+    onClose();  // Fecha o modal de preview
+    setModalPlayOpen(true);  // Abre o modal de play
   }
 
   const handleCloseModalPlay = () => {
@@ -56,7 +58,6 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
           <CardMedia
             component="img"
             alt={title}
-            
             image={`https://image.tmdb.org/t/p/w500${posterPath}`}
           />
 
@@ -69,9 +70,6 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
               SINOPSE
             </Typography>
 
-            {/* <Typography variant="subtitle1" color="text.secondary">
-              {overview}
-            </Typography> */}
             <Typography variant="body2" color="text.secondary">
               Data de lançamento: {formatDate(release_date)}
             </Typography>
