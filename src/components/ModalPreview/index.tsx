@@ -1,4 +1,3 @@
- 
 import { FC, useState } from 'react'
 import { Modal, Typography, Button, CardMedia, Rating } from '@mui/material'
 import { CardStyle, ModalStyle, CardContent } from './styles'
@@ -33,8 +32,8 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
   const [modalPlayOpen, setModalPlayOpen] = useState(false)
 
   const handleOpenModalPlay = () => {
-    onClose();  // Fecha o modal de preview
-    setModalPlayOpen(true);  // Abre o modal de play
+    setModalPlayOpen(true)
+    // onClose()
   }
 
   const handleCloseModalPlay = () => {
@@ -69,7 +68,9 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
             <Typography variant="body2" component="h5">
               SINOPSE
             </Typography>
-
+            <Typography variant="subtitle1" color="text.secondary">
+              {overview}
+            </Typography>
             <Typography variant="body2" color="text.secondary">
               Data de lançamento: {formatDate(release_date)}
             </Typography>
@@ -89,7 +90,7 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
 
             <div className="divplay">
               <Button onClick={handleOpenModalPlay} variant="contained">
-                <Play size={32} color="#ffffff" weight="fill" />
+                <Play size={30} color="#ffffff" weight="fill" />
                 começar a assistir
               </Button>
               <Button onClick={onClose} variant="contained">
