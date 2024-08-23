@@ -6,17 +6,17 @@ import { Loading } from '../Loading'
 import moviesData from './movies.json'
 import seriesData from './series.json'
 
-// Função para limpar o cache
-const clearCache = () => {
-  Object.keys(localStorage).forEach((key) => {
-    if (
-      key.startsWith('movies_page_Topfilmes_') ||
-      key.startsWith('movies_page_TopSeries_')
-    ) {
-      localStorage.removeItem(key)
-    }
-  })
-}
+// Função para limpar o cache dos filmes e séries
+// const clearCache = () => {
+//   Object.keys(localStorage).forEach((key) => {
+//     if (
+//       key.startsWith('movies_page_Topfilmes_') ||
+//       key.startsWith('movies_page_TopSeries_')
+//     ) {
+//       localStorage.removeItem(key)
+//     }
+//   })
+// }
 
 interface ContentModalProps {
   open: boolean
@@ -39,52 +39,46 @@ export const ModalPlay: FC<ContentModalProps> = ({
 }) => {
   const [imdbId, setImdbId] = useState<string | null>(null)
 
-  // Verifica se o uso do IMDb ID está ativado com base nas variáveis de ambiente
-  const useImdbForFilms = import.meta.env.VITE_USE_IMDB_FOR_FILMS === 'true'
-  const useImdbForSeries = import.meta.env.VITE_USE_IMDB_FOR_SERIES === 'true'
+  // Variáveis de ambiente para verificar o uso do IMDb ID
+  const useImdbForFilms = import.meta.env.VITE_USE_IMDB_FOR_FILMS
+  const useImdbForSeries = import.meta.env.VITE_USE_IMDB_FOR_SERIES
 
   useEffect(() => {
     if (contentId) {
-      if (contentType === 'filme' || contentType === 'movie') {
-        if (useImdbForFilms) {
-          // Buscar o IMDb ID correspondente ao TMDB ID para filmes
-          const movie = moviesData.find((m: any) => m.tmdbID === contentId)
-          if (movie) {
-            setImdbId(movie.imdbID)
-          } else {
-            setImdbId(null)
-          }
-        } else {
-          setImdbId(null)
-        }
-      } else if (contentType === 'serie' || contentType === 'tv') {
-        if (useImdbForSeries) {
-          // Buscar o IMDb ID correspondente ao TMDB ID para séries
-          const series = seriesData.find((s: any) => s.tmdbID === contentId)
-          if (series) {
-            setImdbId(series.imdbID)
-          } else {
-            setImdbId(null)
-          }
-        } else {
-          setImdbId(null)
-        }
+      // Buscar o IMDb ID correspondente ao TMDB ID para filmes
+      if (
+        (contentType === 'filme' || contentType === 'movie') &&
+        useImdbForFilms
+      ) {
+        const movie = moviesData.find((m) => m.tmdbID === contentId)
+        setImdbId(movie ? movie.imdbID : null)
+      }
+      // Buscar o IMDb ID correspondente ao TMDB ID para séries
+      else if (
+        (contentType === 'serie' || contentType === 'tv') &&
+        useImdbForSeries
+      ) {
+        const series = seriesData.find((s) => s.tmdbID === contentId)
+        setImdbId(series ? series.imdbID : null)
+      } else {
+        setImdbId(null)
       }
     }
   }, [contentId, contentType, useImdbForFilms, useImdbForSeries])
 
-  // Construir o iframeSrc
-  const iframeSrc =
-    (contentType === 'filme' || contentType === 'movie') && imdbId
-      ? `https://superflixapi.dev/filme/${imdbId}${
-          season ? `/${season}` : ''
-        }${episode ? `/${episode}` : ''}`
-      : (contentType === 'serie' || contentType === 'tv') && contentId
-        ? `https://superflixapi.dev/serie/${contentId}${
-            season ? `/${season}` : ''
-          }${episode ? `/${episode}` : ''}`
-        : ''
+  // Construir o URL do embed para filmes
+  const iframeSrcForMovies =
+    imdbId && (contentType === 'filme' || contentType === 'movie')
+      ? `https://superflixapi.dev/filme/${imdbId}`
+      : ''
 
+  // Construir o URL do embed para séries
+  const iframeSrcForSeries =
+    contentId && (contentType === 'serie' || contentType === 'tv')
+      ? `https://superflixapi.dev/serie/${contentId}${season ? `/${season}` : ''}${episode ? `/${episode}` : ''}`
+      : ''
+
+  // Limpar o cache quando o modal for aberto
   useEffect(() => {
     if (open) {
       clearCache()
@@ -99,9 +93,19 @@ export const ModalPlay: FC<ContentModalProps> = ({
       aria-describedby="modal-description"
     >
       <Box sx={modalStyle} className="modalStyle">
-        {iframeSrc ? (
+        {iframeSrcForMovies ? (
           <iframe
-            src={iframeSrc}
+            src={iframeSrcForMovies}
+            style={{ width: '100%', height: '90%', border: 'none' }}
+            title={title}
+            loading="lazy"
+            allowFullScreen
+            allow="autoplay; fullscreen"
+            sandbox="allow-same-origin allow-scripts"
+          />
+        ) : iframeSrcForSeries ? (
+          <iframe
+            src={iframeSrcForSeries}
             style={{ width: '100%', height: '90%', border: 'none' }}
             title={title}
             loading="lazy"
