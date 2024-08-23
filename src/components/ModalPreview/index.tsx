@@ -33,6 +33,7 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
 
   const handleOpenModalPlay = () => {
     setModalPlayOpen(true)
+    onClose() // Fechar o ModalPreview ao abrir o ModalPlay
   }
 
   const handleCloseModalPlay = () => {
@@ -56,7 +57,6 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
           <CardMedia
             component="img"
             alt={title}
-            
             image={`https://image.tmdb.org/t/p/w500${posterPath}`}
           />
 
@@ -69,9 +69,6 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
               SINOPSE
             </Typography>
 
-            {/* <Typography variant="subtitle1" color="text.secondary">
-              {overview}
-            </Typography> */}
             <Typography variant="body2" color="text.secondary">
               Data de lançamento: {formatDate(release_date)}
             </Typography>
