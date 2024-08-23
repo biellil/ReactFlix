@@ -64,11 +64,11 @@ export const CardStyle = styled(Card)`
   }
 
   .divplay {
-    margin-top: 4rem;
+    margin-top: 1rem;
     display: flex;
     justify-content: space-evenly;
     flex-direction: column;
-    gap: 1.1rem;
+    gap: 1rem;
     height: 70vh;
 
     button {
