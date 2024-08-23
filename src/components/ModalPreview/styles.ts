@@ -64,7 +64,7 @@ export const CardStyle = styled(Card)`
   }
 
   .divplay {
-    margin-top: 9rem;
+    margin-top: 4rem;
     display: flex;
     justify-content: space-evenly;
     flex-direction: column;
