@@ -34,6 +34,7 @@ a{
   border: none;
   text-decoration: none;
   font-family: sans-serif;
+
 }
 
 html {
@@ -41,10 +42,12 @@ html {
 }
 
 body {
+  background: url(${background});
   height: 100vh;
   margin: 0;
   width: 100vw;
-  background-image: url(${background}); // Interpolando a variável da imagem
+  padding: 0;
+  border: 0;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
