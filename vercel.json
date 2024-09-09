@@ -16,7 +16,10 @@
     },
     {
       "src": "/(.*)\\.br",
-      "dest": "/dist/$1.br"
+      "dest": "/dist/$1.br",
+      "headers": {
+        "Content-Encoding": "br"
+      }
     },
     {
       "src": "/(.*)",
