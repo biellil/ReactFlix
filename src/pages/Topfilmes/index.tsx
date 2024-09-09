@@ -76,11 +76,23 @@ export default function Topfilmes({
     return response.json()
   }
 
+  // Função para pré-carregar imagens
+  const preloadImage = (src: string) => {
+    const img = new Image()
+    img.src = src
+  }
+
   const { data, isError, error } = useQuery<ApiResponse, Error>({
     queryKey: ['Topfilmes', page, searchTerm],
     queryFn: () => fetchMovies(page),
     placeholderData: keepPreviousData,
     onSuccess: (data: { total_pages: number }) => {
+      // Pré-carregar imagens da página atual
+      data.results.forEach((movie) => {
+        preloadImage(`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`)
+      })
+
+      // Pré-carregar páginas adicionais
       for (let i = 1; i <= PRELOAD_PAGES; i++) {
         const nextPage = page + i
         if (nextPage <= data.total_pages && nextPage <= MAX_PAGES_DISPLAYED) {
