@@ -11,6 +11,7 @@ export const Headers = styled.header`
 
   img {
     height: 25px;
+    width: 100%;
     display: flex;
 
     @media (max-width: 1024px) {
