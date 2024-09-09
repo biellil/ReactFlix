@@ -19,6 +19,7 @@ export function SearchInput({ searchTerm, onSearchChange }: SearchInputProps) {
       <OutlinedInput
         type="text"
         id="search"
+        color="secondary"
         placeholder="Buscar filmes ou Séries"
         value={searchTerm}
         onChange={handleInputChange}

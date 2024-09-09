@@ -21,6 +21,7 @@ export const Loading = () => {
     <>
       <StyledLinearProgress
         variant="buffer"
+        color="secondary"
         value={progress}
         valueBuffer={buffer}
       />
