@@ -15,13 +15,6 @@
       "dest": "/dist/static/$1"
     },
     {
-      "src": "/(.*)\\.br",
-      "dest": "/dist/$1.br",
-      "headers": {
-        "Content-Encoding": "br"
-      }
-    },
-    {
       "src": "/(.*)\\.gz",
       "dest": "/dist/$1.gz",
       "headers": {

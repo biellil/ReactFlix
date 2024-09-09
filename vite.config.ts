@@ -11,14 +11,9 @@ export default defineConfig({
       open: false,
     }),
     viteCompression({
-      algorithm: 'brotliCompress',
-      threshold: 10240,
-      ext: '.br',
-    }),
-    viteCompression({
-      algorithm: 'gzip',
-      threshold: 10240,
-      ext: '.gz',
+      algorithm: 'gzip', // Usar gzip para compactação
+      threshold: 10240, // Compactar arquivos maiores que 10 KB (ajustar conforme necessário)
+      ext: '.gz', // Extensão dos arquivos gzip compactados
     }),
   ],
   build: {
