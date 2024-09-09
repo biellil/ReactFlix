@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { Button, Typography, TextField, Box } from '@mui/material'
-import { signInWithGoogle, signInWithApple } from '../firebase'
-import { SignupContainer, GoogleButton, AppleButton } from './styles'
+import GoogleIcon from '@mui/icons-material/Google'
+import { signInWithGoogle, signUpWithEmailAndPassword } from '../firebase'
+import { SignupContainer, GoogleButton, SignupPageForm } from './styles'
 import { AuthAnimationWrapper } from '../AuthAnimationWrapper'
+import { useNavigate } from 'react-router-dom'
 
 interface SignupPageProps {
   switchToLogin: (
@@ -13,13 +15,13 @@ interface SignupPageProps {
 const SignupPage = ({ switchToLogin }: SignupPageProps) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+
+  const navigate = useNavigate() // Use o useNavigate para redirecionar
 
   const handleGoogleSignup = async () => {
     await signInWithGoogle()
-  }
-
-  const handleAppleSignup = async () => {
-    await signInWithApple()
+    navigate('/') // Redirecionar após login com Google
   }
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,16 +32,35 @@ const SignupPage = ({ switchToLogin }: SignupPageProps) => {
     setPassword(event.target.value)
   }
 
-  const handleSignup = () => {
-    // Lógica de Signupcom email e senha
-    console.log('Email:', email)
-    console.log('Senha:', password)
+  const handleConfirmPasswordChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setConfirmPassword(event.target.value)
+  }
+
+  // Função de cadastro
+  const handleSignup = async () => {
+    if (password !== confirmPassword) {
+      alert('As senhas não coincidem!')
+      return
+    }
+
+    try {
+      const user = await signUpWithEmailAndPassword(email, password)
+      // console.log('Usuário criado com sucesso:', user)
+
+      // Redirecionar para a rota privada após criar conta com sucesso
+      navigate('/')
+    } catch (error: any) {
+      // console.error('Erro ao criar conta:', error)
+      alert('Erro ao criar conta: ' + error.message)
+    }
   }
 
   return (
     <AuthAnimationWrapper>
-      <SignupContainer className="container">
-        <div>
+      <SignupContainer>
+        <SignupPageForm>
           <Typography variant="h4" component="h1" gutterBottom>
             Crie uma conta
           </Typography>
@@ -48,6 +69,7 @@ const SignupPage = ({ switchToLogin }: SignupPageProps) => {
               label="Email"
               variant="outlined"
               fullWidth
+              color="secondary"
               margin="normal"
               value={email}
               onChange={handleEmailChange}
@@ -57,17 +79,28 @@ const SignupPage = ({ switchToLogin }: SignupPageProps) => {
               type="password"
               variant="outlined"
               fullWidth
+              color="secondary"
               margin="normal"
               value={password}
               onChange={handlePasswordChange}
             />
+            <TextField
+              label="Confirmar Senha"
+              type="password"
+              variant="outlined"
+              color="secondary"
+              fullWidth
+              margin="normal"
+              value={confirmPassword}
+              onChange={handleConfirmPasswordChange}
+            />
             <Button
               variant="contained"
-              color="primary"
+              color="secondary"
               fullWidth
               onClick={handleSignup}
             >
-              Entrar
+              Criar conta
             </Button>
           </Box>
           <Box
@@ -87,20 +120,15 @@ const SignupPage = ({ switchToLogin }: SignupPageProps) => {
           <GoogleButton
             variant="contained"
             fullWidth
+            color="secondary"
             onClick={handleGoogleSignup}
+            startIcon={<GoogleIcon />}
           >
-            Entrar com Google
+            Criar conta com Google
           </GoogleButton>
-          <AppleButton
-            variant="contained"
-            fullWidth
-            onClick={handleAppleSignup}
-          >
-            Entrar com Apple
-          </AppleButton>
-        </div>
-        <Button variant="text" onClick={switchToLogin}>
-          Já estou cadastrado
+        </SignupPageForm>
+        <Button variant="text" color="secondary" onClick={switchToLogin}>
+          Já tem uma conta? Faça login
         </Button>
       </SignupContainer>
     </AuthAnimationWrapper>
