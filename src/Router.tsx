@@ -1,11 +1,11 @@
-// Routers.tsx
 import { Route, Routes } from 'react-router-dom'
 import { Suspense, lazy } from 'react'
 import { Loading } from './components/Loading'
 import { LoadingContainer } from './components/Loading/styles'
+import PrivateRoute from './components/PrivateRoute'
 
 const DefaultLayout = lazy(() => import('./components/layoutDefault'))
-// const Auth = lazy(() => import('./pages/auth'));
+const Auth = lazy(() => import('./pages/auth'))
 
 export function Routers() {
   return (
@@ -17,10 +17,16 @@ export function Routers() {
       }
     >
       <Routes>
-        {/* <Route path="/" element={<Auth />} /> */}
-        <Route path="/" element={<DefaultLayout />} />
-        <Route path="/filmes/:contentId" element={<DefaultLayout />} />
-        <Route path="/Series/:contentId" element={<DefaultLayout />} />
+        {/* Rota pública */}
+        <Route path="/Auth" element={<Auth />}>
+          {/* <Route path="/:uid" element={<Auth />} /> */}
+        </Route>
+
+        {/* Rota protegida */}
+        <Route
+          path="/"
+          element={<PrivateRoute element={<DefaultLayout />} />}
+        />
       </Routes>
     </Suspense>
   )
