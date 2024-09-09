@@ -15,8 +15,12 @@
       "dest": "/dist/static/$1"
     },
     {
+      "src": "/(.*)\\.br",
+      "dest": "/dist/$1.br"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/dist/index.html"
+      "dest": "/dist/$1"
     }
   ]
 }
