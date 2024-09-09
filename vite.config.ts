@@ -12,7 +12,7 @@ export default defineConfig({
     }),
     viteCompression({
       algorithm: 'gzip', // Usar gzip para compactação
-      threshold: 10240, // Compactar arquivos maiores que 10 KB (ajustar conforme necessário)
+      threshold: 20240, // Compactar arquivos maiores que 10 KB (ajustar conforme necessário)
       ext: '.gz', // Extensão dos arquivos gzip compactados
     }),
   ],
