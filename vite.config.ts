@@ -10,7 +10,16 @@ export default defineConfig({
       filename: './dist/stats.html',
       open: false,
     }),
-    viteCompression({ algorithm: 'brotliCompress' }),
+    viteCompression({
+      algorithm: 'brotliCompress',
+      threshold: 10240,
+      ext: '.br',
+    }),
+    viteCompression({
+      algorithm: 'gzip',
+      threshold: 10240,
+      ext: '.gz',
+    }),
   ],
   build: {
     outDir: 'dist',
