@@ -1,12 +1,14 @@
-// src/components/firebase.ts
 import { initializeApp } from 'firebase/app'
 import { getAnalytics } from 'firebase/analytics'
 import { getPerformance } from 'firebase/performance'
 import {
   getAuth,
+  setPersistence,
+  browserLocalPersistence,
   GoogleAuthProvider,
+  createUserWithEmailAndPassword,
   signInWithPopup,
-  OAuthProvider,
+  signOut,
 } from 'firebase/auth'
 
 // Configuração do Firebase
@@ -24,10 +26,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const analytics = getAnalytics(app)
 const performance = getPerformance(app)
-// Configura a autenticação e os provedores
+
+// Inicializa a autenticação e define a persistência
 const auth = getAuth(app)
+setPersistence(auth, browserLocalPersistence) // Persiste a sessão no localStorage
+
+// Provedores de login
 const googleProvider = new GoogleAuthProvider()
-const appleProvider = new OAuthProvider('apple.com')
 
 // Função para fazer login com Google
 const signInWithGoogle = async () => {
@@ -40,15 +45,37 @@ const signInWithGoogle = async () => {
   }
 }
 
-// Função para fazer login com Apple
-const signInWithApple = async () => {
+// Função para criar usuário com email e senha
+const signUpWithEmailAndPassword = async (email: string, password: string) => {
   try {
-    const result = await signInWithPopup(auth, appleProvider)
-    const user = result.user
-    console.log('Usuário autenticado com Apple:', user)
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password,
+    )
+    const user = userCredential.user
+    console.log('Usuário criado com email e senha:', user)
+    return user
   } catch (error) {
-    console.error('Erro ao fazer login com Apple:', error)
+    console.error('Erro ao criar conta com email e senha:', error)
+    throw error
   }
 }
 
-export { analytics, signInWithGoogle, signInWithApple, performance }
+// Função para fazer logout
+const logout = async () => {
+  try {
+    await signOut(auth)
+    console.log('Usuário deslogado com sucesso')
+  } catch (error) {
+    console.error('Erro ao deslogar:', error)
+  }
+}
+
+export {
+  analytics,
+  signInWithGoogle,
+  signUpWithEmailAndPassword,
+  logout,
+  performance,
+}
