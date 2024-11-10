@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { FilmReel, FilmScript, SignOut } from '@phosphor-icons/react'
 import { Category, DivSignOut, Headers } from './styles'
 import icon from '../../assets/icon.png'
 import { SearchInput } from '../SearchInput'
-import { getAuth, signOut } from 'firebase/auth' // Importe o signOut do Firebase
+import { logout } from '../firebase'
 
 interface HeaderProps {
   onCategoryChange: (category: string) => void
@@ -23,16 +23,16 @@ export function Header({
     onCategoryChange(category)
   }
 
-  const handleSignOut = () => {
-    const auth = getAuth() // Obtenha a instância de autenticação do Firebase
-    signOut(auth)
-      .then(() => {
-        localStorage.removeItem('user') // Remove o dado do usuário do localStorage
-        window.location.href = '/' // Redireciona para a página de autenticação
-      })
-      .catch((error) => {
-        console.error('Erro ao fazer sign out:', error)
-      })
+  const handleSignOut = async () => {
+    const success = await logout() // Chamando a função de logout
+
+    if (success) {
+      // Redireciona para a página inicial ou de login caso o logout tenha sido bem-sucedido
+      window.location.href = '/'
+    } else {
+      // Exibe uma mensagem de erro caso o logout falhe
+      console.error('Erro ao fazer logout')
+    }
   }
 
   return (
