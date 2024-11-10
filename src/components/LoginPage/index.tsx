@@ -1,24 +1,41 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Typography, TextField, Box } from '@mui/material'
 import { signInWithGoogle, signUpWithEmailAndPassword } from '../firebase'
 import { LoginContainer, GoogleButton, LoginForm } from './styles'
 import { AuthAnimationWrapper } from '../AuthAnimationWrapper'
 import GoogleIcon from '@mui/icons-material/Google'
-import { useNavigate } from 'react-router-dom' // Importe o useNavigate
+import { useNavigate } from 'react-router-dom'
+import { z } from 'zod'
+
+// Esquema de validação usando Zod
+const loginSchema = z.object({
+  email: z.string().email('Insira um email válido'),
+  password: z.string().min(6, 'A senha deve ter pelo menos 6 caracteres'),
+})
+
+type LoginFormValues = z.infer<typeof loginSchema>
 
 interface LoginPageProps {
   switchToSignup: () => void
 }
 
 const LoginPage = ({ switchToSignup }: LoginPageProps) => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const navigate = useNavigate()
+
+  // Hook do React Hook Form com validação Zod
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+  })
 
   const handleGoogleLogin = async () => {
     try {
       await signInWithGoogle()
-      // Redirecionar após login com Google
       navigate('/')
     } catch (error) {
       console.error('Erro ao fazer login com Google:', error)
@@ -26,21 +43,11 @@ const LoginPage = ({ switchToSignup }: LoginPageProps) => {
     }
   }
 
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value)
-  }
-
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value)
-  }
-
-  const handleLogin = async () => {
+  const onSubmit = async (data: LoginFormValues) => {
     try {
-      await signUpWithEmailAndPassword(email, password)
-      // Redirecionar para rota privada após login bem-sucedido
+      await signUpWithEmailAndPassword(data.email, data.password)
       navigate('/')
     } catch (error: any) {
-      // console.error('Erro ao fazer login:', error)
       alert('Erro ao fazer login: ' + error.message)
     }
   }
@@ -48,7 +55,7 @@ const LoginPage = ({ switchToSignup }: LoginPageProps) => {
   return (
     <AuthAnimationWrapper>
       <LoginContainer>
-        <LoginForm>
+        <LoginForm onSubmit={handleSubmit(onSubmit)}>
           <Typography variant="h4" component="h1" gutterBottom>
             Faça login
           </Typography>
@@ -59,8 +66,9 @@ const LoginPage = ({ switchToSignup }: LoginPageProps) => {
               variant="outlined"
               fullWidth
               margin="normal"
-              value={email}
-              onChange={handleEmailChange}
+              {...register('email')}
+              error={!!errors.email}
+              helperText={errors.email?.message}
             />
             <TextField
               label="Senha"
@@ -69,14 +77,15 @@ const LoginPage = ({ switchToSignup }: LoginPageProps) => {
               color="secondary"
               fullWidth
               margin="normal"
-              value={password}
-              onChange={handlePasswordChange}
+              {...register('password')}
+              error={!!errors.password}
+              helperText={errors.password?.message}
             />
             <Button
               variant="contained"
               color="secondary"
               fullWidth
-              onClick={handleLogin}
+              type="submit"
             >
               Entrar
             </Button>
@@ -105,15 +114,6 @@ const LoginPage = ({ switchToSignup }: LoginPageProps) => {
           >
             Entrar com Google
           </GoogleButton>
-          {/* Descomente se tiver suporte para login com Apple
-          <AppleButton
-            variant="contained"
-            fullWidth
-            onClick={handleAppleLogin}
-            startIcon={<AppleIcon />}
-          >
-            Entrar com Apple
-          </AppleButton> */}
           <Button variant="text" color="secondary" onClick={switchToSignup}>
             Não possui conta? Cadastre-se
           </Button>

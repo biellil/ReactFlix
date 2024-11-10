@@ -1,66 +1,69 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Typography, TextField, Box } from '@mui/material'
 import GoogleIcon from '@mui/icons-material/Google'
 import { signInWithGoogle, signUpWithEmailAndPassword } from '../firebase'
 import { SignupContainer, GoogleButton, SignupPageForm } from './styles'
 import { AuthAnimationWrapper } from '../AuthAnimationWrapper'
 import { useNavigate } from 'react-router-dom'
+import { z } from 'zod'
+
+// Esquema de validação usando Zod
+const signupSchema = z
+  .object({
+    email: z.string().email('Insira um email válido'),
+    password: z.string().min(6, 'A senha deve ter pelo menos 6 caracteres'),
+    confirmPassword: z
+      .string()
+      .min(6, 'A senha deve ter pelo menos 6 caracteres'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'As senhas não coincidem',
+    path: ['confirmPassword'],
+  })
+
+type SignupFormValues = z.infer<typeof signupSchema>
 
 interface SignupPageProps {
-  switchToLogin: (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => void
+  switchToLogin: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 }
 
 const SignupPage = ({ switchToLogin }: SignupPageProps) => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+  const navigate = useNavigate()
 
-  const navigate = useNavigate() // Use o useNavigate para redirecionar
+  // Hook do React Hook Form com validação Zod
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignupFormValues>({
+    resolver: zodResolver(signupSchema),
+  })
 
   const handleGoogleSignup = async () => {
-    await signInWithGoogle()
-    navigate('/') // Redirecionar após login com Google
-  }
-
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value)
-  }
-
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value)
-  }
-
-  const handleConfirmPasswordChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setConfirmPassword(event.target.value)
-  }
-
-  // Função de cadastro
-  const handleSignup = async () => {
-    if (password !== confirmPassword) {
-      alert('As senhas não coincidem!')
-      return
-    }
-
     try {
-      const user = await signUpWithEmailAndPassword(email, password)
-      // console.log('Usuário criado com sucesso:', user)
+      await signInWithGoogle()
+      navigate('/')
+    } catch (error) {
+      console.error('Erro ao fazer login com Google:', error)
+      //alert('Erro ao fazer login com Google: ' + error.message)
+    }
+  }
 
-      // Redirecionar para a rota privada após criar conta com sucesso
+  const onSubmit = async (data: SignupFormValues) => {
+    try {
+      await signUpWithEmailAndPassword(data.email, data.password)
       navigate('/')
     } catch (error: any) {
-      // console.error('Erro ao criar conta:', error)
-      alert('Erro ao criar conta: ' + error.message)
+     // alert('Erro ao criar conta: ' + error.message)
     }
   }
 
   return (
     <AuthAnimationWrapper>
       <SignupContainer>
-        <SignupPageForm>
+        <SignupPageForm onSubmit={handleSubmit(onSubmit)}>
           <Typography variant="h4" component="h1" gutterBottom>
             Crie uma conta
           </Typography>
@@ -71,8 +74,9 @@ const SignupPage = ({ switchToLogin }: SignupPageProps) => {
               fullWidth
               color="secondary"
               margin="normal"
-              value={email}
-              onChange={handleEmailChange}
+              {...register('email')}
+              error={!!errors.email}
+              helperText={errors.email?.message}
             />
             <TextField
               label="Senha"
@@ -81,34 +85,26 @@ const SignupPage = ({ switchToLogin }: SignupPageProps) => {
               fullWidth
               color="secondary"
               margin="normal"
-              value={password}
-              onChange={handlePasswordChange}
+              {...register('password')}
+              error={!!errors.password}
+              helperText={errors.password?.message}
             />
             <TextField
               label="Confirmar Senha"
               type="password"
               variant="outlined"
-              color="secondary"
               fullWidth
+              color="secondary"
               margin="normal"
-              value={confirmPassword}
-              onChange={handleConfirmPasswordChange}
+              {...register('confirmPassword')}
+              error={!!errors.confirmPassword}
+              helperText={errors.confirmPassword?.message}
             />
-            <Button
-              variant="contained"
-              color="secondary"
-              fullWidth
-              onClick={handleSignup}
-            >
+            <Button variant="contained" color="secondary" fullWidth type="submit">
               Criar conta
             </Button>
           </Box>
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            marginY={2}
-          >
+          <Box display="flex" alignItems="center" justifyContent="center" marginY={2}>
             <Box flex={1} height="1px" bgcolor="white" />
             <Box paddingX={2}>
               <Typography variant="body1" color="textSecondary">
