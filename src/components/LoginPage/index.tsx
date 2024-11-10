@@ -1,7 +1,8 @@
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Typography, TextField, Box } from '@mui/material'
-import { signInWithGoogle, signUpWithEmailAndPassword } from '../firebase'
+import { signInWithEmailAndPassword, signInWithGoogle } from '../firebase'
 import { LoginContainer, GoogleButton, LoginForm } from './styles'
 import { AuthAnimationWrapper } from '../AuthAnimationWrapper'
 import GoogleIcon from '@mui/icons-material/Google'
@@ -22,8 +23,8 @@ interface LoginPageProps {
 
 const LoginPage = ({ switchToSignup }: LoginPageProps) => {
   const navigate = useNavigate()
+  const [errorMessages, setErrorMessages] = useState<string[]>([])
 
-  // Hook do React Hook Form com validação Zod
   const {
     register,
     handleSubmit,
@@ -36,18 +37,34 @@ const LoginPage = ({ switchToSignup }: LoginPageProps) => {
     try {
       await signInWithGoogle()
       navigate('/')
-    } catch (error) {
-      console.error('Erro ao fazer login com Google:', error)
-      alert('Erro ao fazer login com Google: ' + error.message)
+    } catch (error: any) {
+      setErrorMessages((prev) => [
+        ...prev,
+        'Erro ao fazer login com Google: ' + error.message,
+      ])
     }
   }
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
-      await signUpWithEmailAndPassword(data.email, data.password)
+      // Aqui deve ser signInWithEmailAndPassword para login
+      await signInWithEmailAndPassword(data.email, data.password)
       navigate('/')
     } catch (error: any) {
-      alert('Erro ao fazer login: ' + error.message)
+      let message = 'Erro ao fazer login'
+      if (error.code === 'auth/user-not-found') {
+        message =
+          'Usuário não encontrado. Verifique seu email e tente novamente.'
+      } else if (error.code === 'auth/wrong-password') {
+        message = 'Senha incorreta. Tente novamente.'
+      } else if (error.code === 'auth/invalid-email') {
+        message = 'O email fornecido é inválido.'
+      } else if (error.code === 'auth/invalid-credentia') {
+        message = 'Verifique o e-mail e a senha e tente novamente.'
+      } else {
+        message = 'Verifique o e-mail e a senha e tente novamente.'
+      }
+      setErrorMessages((prev) => [...prev, message])
     }
   }
 
@@ -58,6 +75,18 @@ const LoginPage = ({ switchToSignup }: LoginPageProps) => {
           <Typography variant="h4" component="h1" gutterBottom>
             Faça login
           </Typography>
+
+          {/* Renderizar lista de mensagens de erro */}
+          {errorMessages.length > 0 && (
+            <Box marginBottom={2}>
+              {errorMessages.map((errorMessage, index) => (
+                <Typography key={index} color="error" variant="body1">
+                  {errorMessage}
+                </Typography>
+              ))}
+            </Box>
+          )}
+
           <Box component="form" noValidate autoComplete="off">
             <TextField
               label="Email"

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Typography, TextField, Box } from '@mui/material'
@@ -33,8 +33,8 @@ interface SignupPageProps {
 
 const SignupPage = ({ switchToLogin }: SignupPageProps) => {
   const navigate = useNavigate()
+  const [errorMessages, setErrorMessages] = useState<string[]>([])
 
-  // Hook do React Hook Form com validação Zod
   const {
     register,
     handleSubmit,
@@ -47,9 +47,11 @@ const SignupPage = ({ switchToLogin }: SignupPageProps) => {
     try {
       await signInWithGoogle()
       navigate('/')
-    } catch (error) {
-      console.error('Erro ao fazer login com Google:', error)
-      // alert('Erro ao fazer login com Google: ' + error.message)
+    } catch (error: any) {
+      setErrorMessages((prev) => [
+        ...prev,
+        'Erro ao fazer login com Google: ' + error.message,
+      ])
     }
   }
 
@@ -58,7 +60,18 @@ const SignupPage = ({ switchToLogin }: SignupPageProps) => {
       await signUpWithEmailAndPassword(data.email, data.password)
       navigate('/')
     } catch (error: any) {
-      // alert('Erro ao criar conta: ' + error.message)
+      // Mapeie o erro e adicione uma mensagem de erro legível para o usuário
+      let message = 'Erro ao criar conta'
+      if (error.code === 'auth/email-already-in-use') {
+        message = 'Este email já está em uso. Tente outro email.'
+      } else if (error.code === 'auth/weak-password') {
+        message = 'A senha é muito fraca. Tente uma senha mais forte.'
+      } else if (error.code === 'auth/invalid-email') {
+        message = 'O email fornecido é inválido.'
+      } else {
+        message = error.message || message
+      }
+      setErrorMessages((prev) => [...prev, message])
     }
   }
 
@@ -69,6 +82,17 @@ const SignupPage = ({ switchToLogin }: SignupPageProps) => {
           <Typography variant="h4" component="h1" gutterBottom>
             Crie uma conta
           </Typography>
+
+          {errorMessages.length > 0 && (
+            <Box marginBottom={2}>
+              {errorMessages.map((errorMessage, index) => (
+                <Typography key={index} color="error" variant="body2">
+                  {errorMessage}
+                </Typography>
+              ))}
+            </Box>
+          )}
+
           <Box component="form" noValidate autoComplete="off">
             <TextField
               label="Email"
