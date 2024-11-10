@@ -87,32 +87,29 @@ export const Category = styled.div`
   }
 `
 export const DivSignOut = styled.div`
-
-cursor: pointer;
-    display: flex;
-    gap: 0.2rem;
-    transition: 0.5s;
-    svg {
-      width: 2rem;
-      height: 2rem;
-      @media screen and (min-width: 1920px) {
-        width: 1.5rem;
-        height: 1.5rem;
-      }
-    }
+  cursor: pointer;
+  display: flex;
+  gap: 0.2rem;
+  transition: 0.5s;
+  svg {
+    width: 2rem;
+    height: 2rem;
     @media screen and (min-width: 1920px) {
-      align-items: center;
-      font-size: 12.5px;
-      gap: 0rem;
+      width: 1.5rem;
+      height: 1.5rem;
     }
-    @media (max-width: 1024px) {
-      font-size: 0.9rem;
-    }
+  }
+  @media screen and (min-width: 1920px) {
+    align-items: center;
+    font-size: 12.5px;
+    gap: 0rem;
+  }
+  @media (max-width: 1024px) {
+    font-size: 0.9rem;
+  }
 
-    &:hover {
-      color:red;
-      transform: scale(1.05);
-    }
-
-
+  &:hover {
+    color: red;
+    transform: scale(1.05);
+  }
 `

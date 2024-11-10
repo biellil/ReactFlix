@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { Navigate } from 'react-router-dom'
+import { LoadingContainer } from '../Loading/styles'
+import { Loading } from '../Loading'
 
 interface PrivateRouteProps {
   element: React.ReactElement
@@ -19,7 +21,11 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ element }) => {
 
   if (isAuthenticated === null) {
     // Exibe um indicador de carregamento enquanto verifica a autenticação
-    return <div>Loading...</div>
+    return (
+      <LoadingContainer>
+        <Loading />
+      </LoadingContainer>
+    )
   }
 
   // Redireciona para a página inicial se não estiver autenticado

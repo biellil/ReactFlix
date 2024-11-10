@@ -26,7 +26,9 @@ const signupSchema = z
 type SignupFormValues = z.infer<typeof signupSchema>
 
 interface SignupPageProps {
-  switchToLogin: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  switchToLogin: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => void
 }
 
 const SignupPage = ({ switchToLogin }: SignupPageProps) => {
@@ -47,7 +49,7 @@ const SignupPage = ({ switchToLogin }: SignupPageProps) => {
       navigate('/')
     } catch (error) {
       console.error('Erro ao fazer login com Google:', error)
-      //alert('Erro ao fazer login com Google: ' + error.message)
+      // alert('Erro ao fazer login com Google: ' + error.message)
     }
   }
 
@@ -56,7 +58,7 @@ const SignupPage = ({ switchToLogin }: SignupPageProps) => {
       await signUpWithEmailAndPassword(data.email, data.password)
       navigate('/')
     } catch (error: any) {
-     // alert('Erro ao criar conta: ' + error.message)
+      // alert('Erro ao criar conta: ' + error.message)
     }
   }
 
@@ -100,11 +102,21 @@ const SignupPage = ({ switchToLogin }: SignupPageProps) => {
               error={!!errors.confirmPassword}
               helperText={errors.confirmPassword?.message}
             />
-            <Button variant="contained" color="secondary" fullWidth type="submit">
+            <Button
+              variant="contained"
+              color="secondary"
+              fullWidth
+              type="submit"
+            >
               Criar conta
             </Button>
           </Box>
-          <Box display="flex" alignItems="center" justifyContent="center" marginY={2}>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            marginY={2}
+          >
             <Box flex={1} height="1px" bgcolor="white" />
             <Box paddingX={2}>
               <Typography variant="body1" color="textSecondary">
