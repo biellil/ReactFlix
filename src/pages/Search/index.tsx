@@ -38,7 +38,7 @@ interface Result {
   known_for?: KnownFor[]
 }
 
- interface KnownFor {
+interface KnownFor {
   backdrop_path: string
   id: number
   title?: string

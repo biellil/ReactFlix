@@ -27,21 +27,27 @@ export const ModalPlay: FC<ContentModalProps> = ({
 
   useEffect(() => {
     const fetchEmbedUrl = async () => {
-      if (!contentId || (contentType !== 'filme' && contentType !== 'movie' && contentType !== 'serie' && contentType !== 'tv'))
+      if (
+        !contentId ||
+        (contentType !== 'filme' &&
+          contentType !== 'movie' &&
+          contentType !== 'serie' &&
+          contentType !== 'tv')
+      )
         return
 
       setLoading(true)
       try {
         // Definir a URL base dependendo do tipo de conteúdo
-        let baseUrl = '';
-        
+        let baseUrl = ''
+
         // Se for filme ou série, configura a URL correta
         if (contentType === 'filme' || contentType === 'movie') {
-          baseUrl = 'https://superflixapi.dev/filmes';
+          baseUrl = 'https://superflixapi.dev/filmes'
         } else if (contentType === 'serie' || contentType === 'tv') {
-          baseUrl = 'https://superflixapi.dev/series';
+          baseUrl = 'https://superflixapi.dev/series'
         }
-        
+
         // Fazer a requisição inicial
         let response = await axios.get(
           `https://cors-anywhere.herokuapp.com/${baseUrl}/?search=${contentId}`,
@@ -63,8 +69,10 @@ export const ModalPlay: FC<ContentModalProps> = ({
           setEmbedUrl(embedLink)
         } else {
           // Se não encontrar o embed para filmes ou séries, tenta buscar como anime
-          console.log('Embed não encontrado para filmes/séries, tentando como anime...')
-          baseUrl = 'https://superflixapi.dev/animes'; // URL para animes
+          console.log(
+            'Embed não encontrado para filmes/séries, tentando como anime...',
+          )
+          baseUrl = 'https://superflixapi.dev/animes' // URL para animes
           response = await axios.get(
             `https://cors-anywhere.herokuapp.com/${baseUrl}/?search=${contentId}`,
             {
