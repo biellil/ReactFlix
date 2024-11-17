@@ -36,7 +36,7 @@ export const ModalPlay: FC<ContentModalProps> = ({
       try {
         // Usando CORS Anywhere como proxy
         const response = await axios.get(
-          `https://cors-anywhere.herokuapp.com/https://superflixapi.dev/filmes/?search=${contentId}`,
+          `https://superflixapi.dev/filmes/?search=${contentId}`,
           {
             headers: {
               'X-Requested-With': 'XMLHttpRequest', // Headers adicionais para permitir a requisição
@@ -53,12 +53,15 @@ export const ModalPlay: FC<ContentModalProps> = ({
 
         if (embedLink) {
           setEmbedUrl(embedLink)
+          alert(`Link do Embed: ${embedLink}`) // Exibe o link no alerta
         } else {
           setEmbedUrl(null)
+          alert('Embed não encontrado.') // Mensagem de erro caso o link não seja encontrado
         }
       } catch (error) {
         console.error('Erro ao buscar o embed:', error)
         setEmbedUrl(null)
+        alert('Erro ao buscar o embed.')
       } finally {
         setLoading(false)
       }
