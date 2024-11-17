@@ -29,9 +29,12 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
   release_date,
   type,
 }) => {
+  console.log('Content ID:', contentId) // Exibe ao renderizar
+
   const [modalPlayOpen, setModalPlayOpen] = useState(false)
 
   const handleOpenModalPlay = () => {
+    console.log('Content ID:', contentId) // Exibe ao clicar no botão
     setModalPlayOpen(true)
     // onClose()
   }
@@ -68,9 +71,6 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
             <Typography variant="body2" component="h5">
               SINOPSE
             </Typography>
-            {/* <Typography variant="subtitle1" color="text.secondary">
-              {overview}
-            </Typography> */}
             <Typography variant="body2" color="text.secondary">
               Data de lançamento: {formatDate(release_date)}
             </Typography>
