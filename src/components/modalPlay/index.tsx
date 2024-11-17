@@ -29,19 +29,27 @@ export const ModalPlay: FC<ContentModalProps> = ({
 
   useEffect(() => {
     const fetchEmbedUrl = async () => {
-      if (!contentId || (contentType !== 'filme' && contentType !== 'movie')) return
+      if (!contentId || (contentType !== 'filme' && contentType !== 'movie'))
+        return
 
       setLoading(true)
       try {
-        // Buscar dados do filme na API ou site
-        const response = await axios.get(`https://superflixapi.dev/filmes/?search=${contentId}`, {
-          responseType: 'text', // Garantir que o retorno seja tratado como texto
-        })
+        // Usando CORS Anywhere como proxy
+        const response = await axios.get(
+          `https://cors-anywhere.herokuapp.com/https://superflixapi.dev/filmes/?search=${contentId}`,
+          {
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest', // Headers adicionais para permitir a requisição
+            },
+          },
+        )
 
         // Parsear o HTML para encontrar o link do embed
         const parser = new DOMParser()
         const doc = parser.parseFromString(response.data, 'text/html')
-        const embedLink = doc.querySelector('a.btn[href*="superflixapi.dev/filme"]')?.getAttribute('href')
+        const embedLink = doc
+          .querySelector('a.btn[href*="superflixapi.dev/filme"]')
+          ?.getAttribute('href')
 
         if (embedLink) {
           setEmbedUrl(embedLink)
