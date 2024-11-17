@@ -36,7 +36,7 @@ export const ModalPlay: FC<ContentModalProps> = ({
       try {
         // Usando CORS Anywhere como proxy
         const response = await axios.get(
-          `https://superflixapi.dev/filmes/?search=${contentId}`,
+          `https://cors-anywhere.herokuapp.com/https://superflixapi.dev/filmes/?search=${contentId}`,
           {
             headers: {
               'X-Requested-With': 'XMLHttpRequest', // Headers adicionais para permitir a requisição
