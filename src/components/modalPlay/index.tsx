@@ -9,7 +9,7 @@ interface ContentModalProps {
   open: boolean
   onClose: () => void
   contentId: string | null // tmdbID
-  contentType: 'filme' | 'serie' | 'movie' | 'tv' | 'anime'
+  contentType: 'filme' | 'serie' | 'movie' | 'tv'
   season?: string
   episode?: string
   title: string
@@ -27,98 +27,70 @@ export const ModalPlay: FC<ContentModalProps> = ({
 
   useEffect(() => {
     const fetchEmbedUrl = async () => {
-      if (
-        !contentId ||
-        (contentType !== 'filme' &&
-          contentType !== 'movie' &&
-          contentType !== 'serie' &&
-          contentType !== 'tv' &&
-          contentType !== 'anime')
-      )
+      if (!contentId || (contentType !== 'filme' && contentType !== 'movie' && contentType !== 'serie' && contentType !== 'tv'))
         return
 
       setLoading(true)
       try {
-        let baseUrl = ''
-        let response
-
         // Definir a URL base dependendo do tipo de conteúdo
+        let baseUrl = '';
+        
+        // Se for filme ou série, configura a URL correta
         if (contentType === 'filme' || contentType === 'movie') {
-          baseUrl = 'https://superflixapi.dev/filmes'
+          baseUrl = 'https://superflixapi.dev/filmes';
         } else if (contentType === 'serie' || contentType === 'tv') {
-          baseUrl = 'https://superflixapi.dev/series'
-        } else if (contentType === 'anime') {
-          baseUrl = 'https://superflixapi.dev/animes'
+          baseUrl = 'https://superflixapi.dev/series';
         }
-
-        // Primeira tentativa de buscar o embed
-        try {
-          response = await axios.get(
-            `https://cors-anywhere.herokuapp.com/${baseUrl}/?search=${contentId}`,
-            {
-              headers: {
-                'X-Requested-With': 'XMLHttpRequest', // Headers adicionais para permitir a requisição
-              },
+        
+        // Fazer a requisição inicial
+        let response = await axios.get(
+          `https://cors-anywhere.herokuapp.com/${baseUrl}/?search=${contentId}`,
+          {
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
             },
-          )
-        } catch (error) {
-          console.error('Erro ao buscar na API principal:', error)
-          throw new Error('Erro ao buscar na API principal')
-        }
+          },
+        )
 
         // Parsear o HTML para encontrar o link do embed
         const parser = new DOMParser()
         const doc = parser.parseFromString(response.data, 'text/html')
-
-        // Encontrar o link de embed dependendo do tipo de conteúdo
-        const embedLink = doc
+        let embedLink = doc
           .querySelector('a.btn[href*="superflixapi.dev"]')
           ?.getAttribute('href')
 
         if (embedLink) {
           setEmbedUrl(embedLink)
-          alert(`Link do Embed: ${embedLink}`) // Exibe o link no alerta
         } else {
-          setEmbedUrl(null)
-          alert('Embed não encontrado na API inicial.')
-        }
-      } catch (error) {
-        console.error(
-          'Tentativa na API principal falhou, tentando como anime:',
-          error,
-        )
-
-        // Se falhou, tentar buscar como anime
-        try {
-          const response = await axios.get(
-            `https://cors-anywhere.herokuapp.com/https://superflixapi.dev/animes/?search=${contentId}`,
+          // Se não encontrar o embed para filmes ou séries, tenta buscar como anime
+          console.log('Embed não encontrado para filmes/séries, tentando como anime...')
+          baseUrl = 'https://superflixapi.dev/animes'; // URL para animes
+          response = await axios.get(
+            `https://cors-anywhere.herokuapp.com/${baseUrl}/?search=${contentId}`,
             {
               headers: {
-                'X-Requested-With': 'XMLHttpRequest', // Headers adicionais para permitir a requisição
+                'X-Requested-With': 'XMLHttpRequest',
               },
             },
           )
 
-          // Parsear o HTML para encontrar o link do embed
-          const parser = new DOMParser()
-          const doc = parser.parseFromString(response.data, 'text/html')
-
-          const embedLink = doc
+          // Parsear novamente o HTML para buscar o embed
+          const animeDoc = parser.parseFromString(response.data, 'text/html')
+          embedLink = animeDoc
             .querySelector('a.btn[href*="superflixapi.dev"]')
             ?.getAttribute('href')
 
           if (embedLink) {
             setEmbedUrl(embedLink)
-            alert(`Link do Embed: ${embedLink}`) // Exibe o link no alerta
           } else {
             setEmbedUrl(null)
-            alert(`Link do Embed: ${embedLink}`)
+            alert('Embed não encontrado para anime.')
           }
-        } catch (animeError) {
-          console.error('Erro ao buscar na API de animes:', animeError)
-          setEmbedUrl(null)
-          alert('Erro ao buscar o embed na API de animes.')
         }
+      } catch (error) {
+        console.error('Erro ao buscar o embed:', error)
+        setEmbedUrl(null)
+        alert('Erro ao buscar o embed.')
       } finally {
         setLoading(false)
       }
