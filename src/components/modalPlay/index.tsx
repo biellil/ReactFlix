@@ -69,9 +69,9 @@ export const ModalPlay: FC<ContentModalProps> = ({
           setEmbedUrl(embedLink)
         } else {
           // Se não encontrar o embed para filmes ou séries, tenta buscar como anime
-          console.log(
-            'Embed não encontrado para filmes/séries, tentando como anime...',
-          )
+          // console.log(
+          //   'Embed não encontrado para filmes/séries, tentando como anime...',
+          // )
           baseUrl = 'https://superflixapi.dev/animes' // URL para animes
           response = await axios.get(
             `https://cors-anywhere.herokuapp.com/${baseUrl}/?search=${contentId}`,
@@ -92,7 +92,7 @@ export const ModalPlay: FC<ContentModalProps> = ({
             setEmbedUrl(embedLink)
           } else {
             setEmbedUrl(null)
-            alert('Embed não encontrado para anime.')
+            // alert('Embed não encontrado para anime.')
           }
         }
       } catch (error) {
