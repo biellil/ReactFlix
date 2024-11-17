@@ -27,21 +27,28 @@ export const ModalPlay: FC<ContentModalProps> = ({
 
   useEffect(() => {
     const fetchEmbedUrl = async () => {
-      if (!contentId || (contentType !== 'filme' && contentType !== 'movie' && contentType !== 'serie' && contentType !== 'tv' && contentType !== 'anime'))
+      if (
+        !contentId ||
+        (contentType !== 'filme' &&
+          contentType !== 'movie' &&
+          contentType !== 'serie' &&
+          contentType !== 'tv' &&
+          contentType !== 'anime')
+      )
         return
 
       setLoading(true)
       try {
-        let baseUrl = '';
-        let response;
+        let baseUrl = ''
+        let response
 
         // Definir a URL base dependendo do tipo de conteúdo
         if (contentType === 'filme' || contentType === 'movie') {
-          baseUrl = 'https://superflixapi.dev/filmes';
+          baseUrl = 'https://superflixapi.dev/filmes'
         } else if (contentType === 'serie' || contentType === 'tv') {
-          baseUrl = 'https://superflixapi.dev/series';
+          baseUrl = 'https://superflixapi.dev/series'
         } else if (contentType === 'anime') {
-          baseUrl = 'https://superflixapi.dev/animes';
+          baseUrl = 'https://superflixapi.dev/animes'
         }
 
         // Primeira tentativa de buscar o embed
@@ -56,7 +63,7 @@ export const ModalPlay: FC<ContentModalProps> = ({
           )
         } catch (error) {
           console.error('Erro ao buscar na API principal:', error)
-          throw new Error('Erro ao buscar na API principal');
+          throw new Error('Erro ao buscar na API principal')
         }
 
         // Parsear o HTML para encontrar o link do embed
@@ -76,7 +83,10 @@ export const ModalPlay: FC<ContentModalProps> = ({
           alert('Embed não encontrado na API inicial.')
         }
       } catch (error) {
-        console.error('Tentativa na API principal falhou, tentando como anime:', error)
+        console.error(
+          'Tentativa na API principal falhou, tentando como anime:',
+          error,
+        )
 
         // Se falhou, tentar buscar como anime
         try {
@@ -102,7 +112,7 @@ export const ModalPlay: FC<ContentModalProps> = ({
             alert(`Link do Embed: ${embedLink}`) // Exibe o link no alerta
           } else {
             setEmbedUrl(null)
-            alert('Embed não encontrado como anime.')
+            alert(`Link do Embed: ${embedLink}`)
           }
         } catch (animeError) {
           console.error('Erro ao buscar na API de animes:', animeError)
