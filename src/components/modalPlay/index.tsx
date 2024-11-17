@@ -27,36 +27,48 @@ export const ModalPlay: FC<ContentModalProps> = ({
 
   useEffect(() => {
     const fetchEmbedUrl = async () => {
-      if (!contentId) return
+      if (
+        !contentId ||
+        (contentType !== 'filme' &&
+          contentType !== 'movie' &&
+          contentType !== 'serie' &&
+          contentType !== 'tv')
+      )
+        return
 
       setLoading(true)
       try {
-        let apiUrl = ''
+        // Definir a URL base dependendo do tipo de conteúdo
+        const baseUrl =
+          contentType === 'filme' || contentType === 'movie'
+            ? 'https://superflixapi.dev/filmes'
+            : 'https://superflixapi.dev/series'
 
-        // Definindo a URL da API dependendo do tipo de conteúdo
-        if (contentType === 'filme' || contentType === 'movie') {
-          apiUrl = `https://cors-anywhere.herokuapp.com/https://superflixapi.dev/filmes/?search=${contentId}`
-        } else if (contentType === 'serie' || contentType === 'tv') {
-          apiUrl = `https://cors-anywhere.herokuapp.com/https://superflixapi.dev/series/?search=${contentId}`
-        }
-
-        const response = await axios.get(apiUrl, {
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest', // Headers adicionais para permitir a requisição
+        // Usando CORS Anywhere como proxy
+        const response = await axios.get(
+          `https://cors-anywhere.herokuapp.com/${baseUrl}/?search=${contentId}`,
+          {
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest', // Headers adicionais para permitir a requisição
+            },
           },
-        })
+        )
 
         // Parsear o HTML para encontrar o link do embed
         const parser = new DOMParser()
         const doc = parser.parseFromString(response.data, 'text/html')
+
+        // Encontrar o link de embed dependendo do tipo de conteúdo
         const embedLink = doc
-          .querySelector('a.btn[href*="superflixapi.dev/"]')
+          .querySelector('a.btn[href*="superflixapi.dev"]')
           ?.getAttribute('href')
 
         if (embedLink) {
           setEmbedUrl(embedLink)
+          alert(`Link do Embed: ${embedLink}`) // Exibe o link no alerta
         } else {
           setEmbedUrl(null)
+          alert('Embed não encontrado.') // Mensagem de erro caso o link não seja encontrado
         }
       } catch (error) {
         console.error('Erro ao buscar o embed:', error)
