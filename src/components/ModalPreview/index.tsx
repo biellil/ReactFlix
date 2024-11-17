@@ -29,7 +29,7 @@ export const ModalPreview: FC<ContentPreviewProps> = ({
   release_date,
   type,
 }) => {
-  console.log('Content ID:', contentId) // Exibe ao renderizar
+  // console.log('Content ID:', contentId) // Exibe ao renderizar
 
   const [modalPlayOpen, setModalPlayOpen] = useState(false)
 

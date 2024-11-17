@@ -20,8 +20,6 @@ export const ModalPlay: FC<ContentModalProps> = ({
   onClose,
   contentId,
   contentType,
-  season,
-  episode,
   title,
 }) => {
   const [embedUrl, setEmbedUrl] = useState<string | null>(null)
@@ -29,34 +27,36 @@ export const ModalPlay: FC<ContentModalProps> = ({
 
   useEffect(() => {
     const fetchEmbedUrl = async () => {
-      if (!contentId || (contentType !== 'filme' && contentType !== 'movie'))
-        return
+      if (!contentId) return
 
       setLoading(true)
       try {
-        // Usando CORS Anywhere como proxy
-        const response = await axios.get(
-          `https://cors-anywhere.herokuapp.com/https://superflixapi.dev/filmes/?search=${contentId}`,
-          {
-            headers: {
-              'X-Requested-With': 'XMLHttpRequest', // Headers adicionais para permitir a requisição
-            },
+        let apiUrl = ''
+
+        // Definindo a URL da API dependendo do tipo de conteúdo
+        if (contentType === 'filme' || contentType === 'movie') {
+          apiUrl = `https://cors-anywhere.herokuapp.com/https://superflixapi.dev/filmes/?search=${contentId}`
+        } else if (contentType === 'serie' || contentType === 'tv') {
+          apiUrl = `https://cors-anywhere.herokuapp.com/https://superflixapi.dev/series/?search=${contentId}`
+        }
+
+        const response = await axios.get(apiUrl, {
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest', // Headers adicionais para permitir a requisição
           },
-        )
+        })
 
         // Parsear o HTML para encontrar o link do embed
         const parser = new DOMParser()
         const doc = parser.parseFromString(response.data, 'text/html')
         const embedLink = doc
-          .querySelector('a.btn[href*="superflixapi.dev/filme"]')
+          .querySelector('a.btn[href*="superflixapi.dev/"]')
           ?.getAttribute('href')
 
         if (embedLink) {
           setEmbedUrl(embedLink)
-          alert(`Link do Embed: ${embedLink}`) // Exibe o link no alerta
         } else {
           setEmbedUrl(null)
-          alert('Embed não encontrado.') // Mensagem de erro caso o link não seja encontrado
         }
       } catch (error) {
         console.error('Erro ao buscar o embed:', error)
