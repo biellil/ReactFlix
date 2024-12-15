@@ -13,8 +13,6 @@ RUN pnpm install # Instalar as dependências com pnpm
 
 RUN pnpm run build # Rodar o build com pnpm
 
-# Instalar o pacote 'serve' localmente
-RUN pnpm add -D serve
 
 EXPOSE 8080
 
