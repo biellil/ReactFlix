@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Pagination, Alert, Snackbar, IconButton } from '@mui/material'
+import { Pagination, Snackbar, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import {
@@ -15,49 +15,9 @@ interface Result {
   backdrop_path?: string
   id: number
   name?: string
-  original_name?: string
-  overview?: string
-  poster_path?: string
-  media_type: string
-  adult: boolean
-  original_language?: string
-  genre_ids?: number[]
-  popularity: number
-  first_air_date?: string
-  vote_average?: number
-  vote_count?: number
-  origin_country?: string[]
   title?: string
-  original_title?: string
-  release_date?: string
-  video?: boolean
-  gender?: number
-  known_for_department?: string
-  profile_path?: string
-  // eslint-disable-next-line no-use-before-define
-  known_for?: KnownFor[]
-}
-
-interface KnownFor {
-  backdrop_path: string
-  id: number
-  title?: string
-  original_title?: string
-  overview: string
-  poster_path: string
   media_type: string
-  adult: boolean
-  original_language: string
-  genre_ids: number[]
-  popularity: number
-  release_date?: string
-  video?: boolean
-  vote_average: number
-  vote_count: number
-  name?: string
-  original_name?: string
-  first_air_date?: string
-  origin_country?: string[]
+  // Outros campos omitidos para brevidade
 }
 
 interface ApiResponse {
@@ -81,7 +41,6 @@ export default function SearchComponent({ searchTerm }: SearchComponentProps) {
   const [openSnackbar, setOpenSnackbar] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedResult, setSelectedResult] = useState<Result | null>(null)
-  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768)
 
   const queryClient = useQueryClient()
 
@@ -104,39 +63,12 @@ export default function SearchComponent({ searchTerm }: SearchComponentProps) {
   const { data, isError, error } = useQuery<ApiResponse, Error>({
     queryKey: ['SearchResults', searchTerm, page],
     queryFn: () => fetchResults(page),
-    keepPreviousData: true, // Corrigido
-    onSuccess: (data) => {
-      for (let i = 1; i <= PRELOAD_PAGES; i++) {
-        const nextPage = page + i
-        if (nextPage <= data.total_pages && nextPage <= MAX_PAGES_DISPLAYED) {
-          queryClient.prefetchQuery(
-            ['SearchResults', searchTerm, nextPage],
-            () => fetchResults(nextPage),
-          )
-        }
-      }
-    },
-    onError: () => setOpenSnackbar(true), // Abre o Snackbar ao ocorrer erro
+    keepPreviousData: true,
+    onError: () => setOpenSnackbar(true),
   })
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsSmallScreen(window.innerWidth <= 768)
-    }
-
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value)
-  }
-
-  const handleCloseSnackbar = () => {
-    setOpenSnackbar(false)
   }
 
   const handleOpenModal = (result: Result) => {
@@ -149,6 +81,12 @@ export default function SearchComponent({ searchTerm }: SearchComponentProps) {
     setSelectedResult(null)
   }
 
+  const getContentType = (mediaType: string): 'filme' | 'serie' | 'anime' => {
+    if (mediaType === 'movie') return 'filme'
+    if (mediaType === 'tv') return 'serie'
+    return 'anime' // Default para casos que não sejam movie ou tv
+  }
+
   return (
     <SearchContainer>
       <Pagination
@@ -158,40 +96,41 @@ export default function SearchComponent({ searchTerm }: SearchComponentProps) {
         variant="outlined"
       />
       <ResultsGrid>
-        {data?.results
-          .slice(0, isSmallScreen ? 8 : data.results.length) // Corrigido para limitar resultados no mobile
-          .map((result) => (
-            <ResultCard key={result.id} onClick={() => handleOpenModal(result)}>
-              <ResultBanner
-                src={`https://image.tmdb.org/t/p/w500${result.backdrop_path}`}
-                alt={result.title || result.name}
-              />
-              <ResultTitle>{result.title || result.name}</ResultTitle>
-            </ResultCard>
-          ))}
+        {data?.results.map((result) => (
+          <ResultCard key={result.id} onClick={() => handleOpenModal(result)}>
+            <ResultBanner
+              src={`https://image.tmdb.org/t/p/w500${result.backdrop_path}`}
+              alt={result.title || result.name}
+            />
+            <ResultTitle>{result.title || result.name}</ResultTitle>
+          </ResultCard>
+        ))}
       </ResultsGrid>
       <Snackbar
         open={isError && openSnackbar}
         autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
+        onClose={() => setOpenSnackbar(false)}
         message={error?.message}
         action={
           <IconButton
             size="small"
             aria-label="close"
             color="inherit"
-            onClick={handleCloseSnackbar}
+            onClick={() => setOpenSnackbar(false)}
           >
             <CloseIcon />
           </IconButton>
         }
       />
-      <ModalPlay
-        open={modalOpen}
-        onClose={handleCloseModal}
-        contentId={selectedResult?.id.toString() || ''}
-        contentType={selectedResult?.media_type || ''}
-      />
+      {selectedResult && (
+        <ModalPlay
+          open={modalOpen}
+          onClose={handleCloseModal}
+          contentId={selectedResult.id.toString()}
+          contentType={getContentType(selectedResult.media_type)}
+          title={selectedResult.title || selectedResult.name || 'Sem título'}
+        />
+      )}
     </SearchContainer>
   )
 }
