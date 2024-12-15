@@ -1,6 +1,4 @@
-// ModalPlay atualizado para usar o novo endpoint
 import { FC, useEffect, useState } from 'react'
-import axios from 'axios'
 import { Modal, Box, Typography, Button } from '@mui/material'
 import { modalStyle } from './styles'
 import { StyledLinearProgress } from '../Loading/styles'
@@ -23,37 +21,66 @@ export const ModalPlay: FC<ContentModalProps> = ({
 }) => {
   const [embedUrl, setEmbedUrl] = useState<string | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchEmbedUrl = async () => {
-      if (!title || !contentType) return
+      if (!title || !contentType) {
+        setError('Título ou tipo de conteúdo inválido.')
+        return
+      }
 
       setLoading(true)
-      try {
-        // Codificar o título para a URL
-        const encodedTitle = encodeURIComponent(title)
-        const encodedType = encodeURIComponent(contentType)
+      setError(null)
 
-        // Fazer a requisição para o novo endpoint
-        const response = await axios.get(
-          `https://n8n.biellil.com.br/webhook/b8c4f50c-5cbf-4676-9638-73050ad1bfd9?title=${encodedTitle}&type=${encodedType}`,
+      try {
+        const password = import.meta.env.VITE_API_PASSWORD
+
+        const response = await fetch(
+          `https://n8n.biellil.com.br/webhook/b8c4f50c-5cbf-4676-9638-73050ad1bfd9?title=${title}&type=${contentType}`,
+          {
+            method: 'GET',
+            headers: {
+              // Correção do cabeçalho de autenticação
+              'n8n-api': password, // Corrigir o valor de acordo com o esperado
+            },
+          },
         )
 
-        if (response.data?.link) {
-          setEmbedUrl(response.data.link)
+        // Verifica se a requisição foi bem-sucedida
+        if (!response.ok) {
+          throw new Error(`Erro ao buscar embed: ${response.statusText}`)
+        }
+
+        const data = await response.json()
+
+        // Log da resposta para mais detalhes
+        console.log('Response Data:', data)
+
+        if (data?.link) {
+          setEmbedUrl(data.link)
         } else {
           setEmbedUrl(null)
+          setError('Link embed não encontrado.')
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error('Erro ao buscar o embed:', error)
         setEmbedUrl(null)
+        setError(error.message || 'Erro desconhecido ao buscar o embed.')
       } finally {
         setLoading(false)
       }
     }
 
-    fetchEmbedUrl()
-  }, [title, contentType])
+    if (open) {
+      fetchEmbedUrl()
+    }
+
+    return () => {
+      setEmbedUrl(null)
+      setError(null)
+    }
+  }, [title, contentType, open])
 
   return (
     <Modal open={open} onClose={onClose} aria-labelledby={title}>
@@ -63,6 +90,10 @@ export const ModalPlay: FC<ContentModalProps> = ({
             <StyledLinearProgress>
               <Loading />
             </StyledLinearProgress>
+          </Typography>
+        ) : error ? (
+          <Typography variant="body1" color="error">
+            {error}
           </Typography>
         ) : embedUrl ? (
           <iframe
