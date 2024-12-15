@@ -1,3 +1,4 @@
+// ModalPlay atualizado para usar o novo endpoint
 import { FC, useEffect, useState } from 'react'
 import axios from 'axios'
 import { Modal, Box, Typography, Button } from '@mui/material'
@@ -10,8 +11,6 @@ interface ContentModalProps {
   onClose: () => void
   contentId: string | null // tmdbID
   contentType: 'filme' | 'serie' | 'movie' | 'tv'
-  season?: string
-  episode?: string
   title: string
 }
 
@@ -27,85 +26,34 @@ export const ModalPlay: FC<ContentModalProps> = ({
 
   useEffect(() => {
     const fetchEmbedUrl = async () => {
-      if (
-        !contentId ||
-        (contentType !== 'filme' &&
-          contentType !== 'movie' &&
-          contentType !== 'serie' &&
-          contentType !== 'tv')
-      )
-        return
+      if (!title || !contentType) return
 
       setLoading(true)
       try {
-        // Definir a URL base dependendo do tipo de conteúdo
-        let baseUrl = ''
+        // Codificar o título para a URL
+        const encodedTitle = encodeURIComponent(title)
+        const encodedType = encodeURIComponent(contentType)
 
-        // Se for filme ou série, configura a URL correta
-        if (contentType === 'filme' || contentType === 'movie') {
-          baseUrl = 'https://superflixapi.dev/filmes'
-        } else if (contentType === 'serie' || contentType === 'tv') {
-          baseUrl = 'https://superflixapi.dev/series'
-        }
-
-        // Fazer a requisição inicial
-        let response = await axios.get(
-          `https://cors-anywhere.herokuapp.com/${baseUrl}/?search=${contentId}`,
-          {
-            headers: {
-              'X-Requested-With': 'XMLHttpRequest',
-            },
-          },
+        // Fazer a requisição para o novo endpoint
+        const response = await axios.get(
+          `https://n8n.biellil.com.br/webhook/b8c4f50c-5cbf-4676-9638-73050ad1bfd9?title=${encodedTitle}&type=${encodedType}`,
         )
 
-        // Parsear o HTML para encontrar o link do embed
-        const parser = new DOMParser()
-        const doc = parser.parseFromString(response.data, 'text/html')
-        let embedLink = doc
-          .querySelector('a.btn[href*="superflixapi.dev"]')
-          ?.getAttribute('href')
-
-        if (embedLink) {
-          setEmbedUrl(embedLink)
+        if (response.data?.link) {
+          setEmbedUrl(response.data.link)
         } else {
-          // Se não encontrar o embed para filmes ou séries, tenta buscar como anime
-          // console.log(
-          //   'Embed não encontrado para filmes/séries, tentando como anime...',
-          // )
-          baseUrl = 'https://superflixapi.dev/animes' // URL para animes
-          response = await axios.get(
-            `https://cors-anywhere.herokuapp.com/${baseUrl}/?search=${contentId}`,
-            {
-              headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-              },
-            },
-          )
-
-          // Parsear novamente o HTML para buscar o embed
-          const animeDoc = parser.parseFromString(response.data, 'text/html')
-          embedLink = animeDoc
-            .querySelector('a.btn[href*="superflixapi.dev"]')
-            ?.getAttribute('href')
-
-          if (embedLink) {
-            setEmbedUrl(embedLink)
-          } else {
-            setEmbedUrl(null)
-            // alert('Embed não encontrado para anime.')
-          }
+          setEmbedUrl(null)
         }
       } catch (error) {
         console.error('Erro ao buscar o embed:', error)
         setEmbedUrl(null)
-        alert('Erro ao buscar o embed.')
       } finally {
         setLoading(false)
       }
     }
 
     fetchEmbedUrl()
-  }, [contentId, contentType])
+  }, [title, contentType])
 
   return (
     <Modal open={open} onClose={onClose} aria-labelledby={title}>

@@ -34,4 +34,7 @@ export default defineConfig({
     },
     chunkSizeWarningLimit: 750,
   },
+  server: {
+    port: 3000, // Definir a porta para 3000
+  },
 })

@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    networks:
+      - traefik_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ReactFlix.rule=Host(`biellil.com.br`)"  
+      - "traefik.http.routers.ReactFlix.entrypoints=web,websecure"
+      - "traefik.http.services.ReactFlix.loadbalancer.server.port=3000"
+    restart: always
+    ports:
+      - 3000:3000
+
+networks:
+  traefik_network:
+    external: true
