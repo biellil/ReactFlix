@@ -19,12 +19,9 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure  # Reinicia em caso de falha
-      placement:
-        constraints:
-          - node.role == worker  # Executa somente nos nós de tipo "worker"
       resources:
         limits:
-          memory: 700M  # Limita a memória do container
+          memory: 600M  # Limita a memória do container
           cpus: '1'    # Limita o uso de CPU
         reservations:
           memory: 200M  # Garante memória suficiente para o container
@@ -33,4 +30,3 @@ services:
 networks:
   traefik_network02:
     external: true
-
