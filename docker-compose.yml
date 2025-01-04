@@ -7,11 +7,6 @@ services:
       dockerfile: ./Dockerfile
     networks:
       - traefik_network02
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.ReactFlix.rule=Host(`play.biellil.com.br`)"  
-      - "traefik.http.routers.ReactFlix.entrypoints=web,websecure"
-      - "traefik.http.services.ReactFlix.loadbalancer.server.port=3000"
     restart: always
     ports:
       - 3000:3000
@@ -27,6 +22,3 @@ services:
           memory: 200M  # Garante memória suficiente para o container
           cpus: '0.25'  # Garante CPU disponível      
 
-networks:
-  traefik_network02:
-    external: true
