@@ -7,14 +7,15 @@ export const ModalStyle = styled(Box)`
   left: 50%;
   transform: translate(-50%, -50%);
   /* background: ${({ theme }) => theme.palette.background.paper}; */
-  box-shadow: 24px;
   padding: 2rem;
 
   > div {
-    background: ${({ theme }) => theme.palette.background.paper};
-    height: 75vh;
-    width: 90vw;
+    height: 85vh;
+    width: 57vw;
     max-width: 75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .Rating {
@@ -44,10 +45,12 @@ export const CardStyle = styled(Card)`
   height: 70vh;
   width: 35vw;
   display: flex;
+  align-items: center;
+  justify-content: center;
 
   img {
-    height: auto;
-    width: 35vw;
+    height: 85vh;
+    width: 31vw;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -100,7 +103,7 @@ export const CardContent = styled(Card)`
   flex-direction: column;
   padding: 1.5rem;
   gap: 1rem;
-  height: auto;
+  height: 85vh;
 `
 
 export const RatingDiv = styled(Box)`
