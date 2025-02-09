@@ -37,7 +37,7 @@ export const ModalPlay: FC<ContentModalProps> = ({
         const password = import.meta.env.VITE_API_PASSWORD
 
         const response = await fetch(
-          `https://n8n.biellil.com.br/webhook/b8c4f50c-5cbf-4676-9638-73050ad1bfd9?title=${title}&type=${contentType}`,
+          `https://webhook.biellil.com.br/webhook/b8c4f50c-5cbf-4676-9638-73050ad1bfd9?title=${title}&type=${contentType}`,
           {
             method: 'GET',
             headers: {
